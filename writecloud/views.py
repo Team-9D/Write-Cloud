@@ -19,6 +19,12 @@ def writecloud_user_login(request):
 
             else:
                 return HttpResponse("Your WriteCloud account has been disabled.")
+        else:
+            print(f"Login details not valid: {username}, {password}")
+            return HttpResponse("The login details provided are invalid.")
+
+    else:
+        return render(request, 'writecloud/login.html')
 
             
 
