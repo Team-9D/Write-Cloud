@@ -8,7 +8,7 @@
     <body>
         <h1>Please enter your login details below</h1>
     <div>
-        <form id="login_form" method="post" action="{% url 'write cloud:login' %}">
+        <form id="login_form" method="post" action="{% url 'writecloud:login' %}">
             {% csrf_token %}
             Username: <input type="text" name="username" value="" size="50" />
             <br />
