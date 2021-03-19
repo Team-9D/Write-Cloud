@@ -1,7 +1,8 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from writecloud.models import Story, Page, UserProfile
 
 # Create your views here.
@@ -10,28 +11,34 @@ def index(request):
     return HttpResponse("Hello, world. You're at the WriteCloud index.")
 
 
-def writecloud_user_login(request):
+def user_login(request):
 
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        writecloud_user = authenticate(username=username, password=password)
+        user = authenticate(username=username, password=password)
 
-        if writecloud_user:
-
-            if writecloud_user.is_active:
+        if user:
+            if user.is_active:
                 login(request, user)
-
+                return redirect(reverse('writecloud:index'))
 
             else:
                 return HttpResponse("Your WriteCloud account has been disabled.")
+        
         else:
             print(f"Login details not valid: {username}, {password}")
             return HttpResponse("The login details provided are invalid.")
 
     else:
         return render(request, 'writecloud/login.html')
+
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect(reverse('rango:index'))
 
 
 def story(request, story_uuid):
