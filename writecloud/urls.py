@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('login/', views.writecloud_user_login, name='login'),
     path('story/<uuid:story_uuid>', views.story, name='story'),
 ]
