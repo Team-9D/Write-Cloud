@@ -15,7 +15,7 @@ def writecloud_user_login(request):
 
             if writecloud_user.is_active:
                 login(request, user)
-                return redirect(reverse('
+
 
             else:
                 return HttpResponse("Your WriteCloud account has been disabled.")
