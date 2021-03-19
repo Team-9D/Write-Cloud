@@ -1,0 +1,15 @@
+{% extends 'writecloud/base.html' %}
+
+{% block head_block %}
+    <h1>{{ title }}</h1>
+    <p><b><i>by: {{ author }}</i></b></p>
+    <br />
+{% endblock %}
+
+{% block body_block %}
+    {% for page in pages %}
+        {{ page.content }} <br />
+        <p><i>page {{ page.number }} by {{ page.author }}</i></p>
+        <br />
+    {% endfor %}
+{% endblock %}
