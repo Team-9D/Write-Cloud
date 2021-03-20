@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<style>
+img {display: block;
+    margin-left: auto;
+    margin-right: auto;}
+nav {
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #2350d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 4% !important;
+}
+.resize {
+    width: 300px;
+    height: auto;
+}
+.resize-header {
+    width: 80px;
+}
+header {
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #2350d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+    line-height: 3.5em;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0 50%;
+	}
+}
+
+.limit{
+    font-size : 1vw;
+    font-family: "Apple Symbols";
+    color: #23d5d2 !important;
+}
+.row{
+    margin-top: 1% !important;
+    color: #ee7752;
+}
+.inside{
+    font-size : 1.3vw;
+    font-family: "Apple Symbols";
+    color: #ee7752;
+}
+
+#left-row{
+    margin-left: 5% !important;
+}
+
+.left-form{
+    margin-right: 25% !important;
+}
+
+#rankings{
+    margin: auto;
+}
+</style>
+
+<html lang="en">
+<head>
+  <title>Bootstrap</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+    <body>
+        <header class="navbar navbar-default">
+          <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li><img class="resize-header" src="{% static "Logo.png" %}"/></li>
+                <li ><a class="limit" href="#">Home</a></li>
+                <li><a class="limit" href="#">Start Story</a></li>
+                <li><a class="limit" href="#">Continue Story</a></li>
+                <li><a class="limit" href="#">Top Stories</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a class="limit" href="#">My Account</a></li>
+                <li><a class="limit" href="#">Contact Us</a></li>
+            </ul>
+          </div>
+        </header>
+
+        <nav class="container">
+            <img class="resize" src="{% static "Logo.png" %}"/>
+        </nav>
+
+        <div class="row">
+          <div class="col-md-6" id="left-row">
+            <div class="row">
+                <li><a class="inside" href="#">Start a new story</a></li>
+            </div>
+            <div class="row">
+                <li><a class="inside" href="#">Title</a></li>
+            </div>
+            <div class="row">
+                <li><a class="inside" href="#">Select a template</a></li>
+            </div>
+              <div class="left-form">
+                  <form>
+                  <div class="form-group">
+                      <textarea class="form-control" id="input" rows="3"></textarea>
+                  </div>
+              </form>
+              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row">
+                <li><a class="inside" href="#">Continue a Progressing Story</a></li>
+            </div>
+            <div class="row">
+                <li><a class="inside" href="#">Number of Stories</a></li>
+            </div>
+            <div class="row">
+                <li><a class="inside" href="#">Number of Active Users</a></li>
+            </div>
+              <div class="right-form">
+                  <form>
+                  <div class="form-group">
+                      <textarea class="form-control" id="input" rows="3"></textarea>
+                  </div>
+              </form>
+              </div>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-center text-center" id="rankings">
+                <li><a class="inside" href="#">Rankings</a></li>
+        </div>
+  </body>
+
+</html>

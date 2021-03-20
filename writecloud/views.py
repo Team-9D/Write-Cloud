@@ -7,8 +7,9 @@ from writecloud.models import Story, Page, UserProfile
 
 # Create your views here.
 
+
 def index(request):
-    return HttpResponse("Hello, world. You're at the WriteCloud index.")
+    return render(request, 'writecloud/index.html')
 
 
 def user_login(request):
