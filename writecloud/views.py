@@ -4,12 +4,18 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.shortcuts import redirect, render
 from writecloud.models import Story, Page, UserProfile
+from writecloud.forms import DocumentForm
+from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 
 
 def index(request):
     return render(request, 'writecloud/index.html')
+
+
+def account(request):
+    return render(request, 'writecloud/account.html')
 
 
 def user_login(request):
@@ -44,8 +50,8 @@ def user_logout(request):
 
 def story(request, story_uuid):
 
-    story = Story.objects.get(uuid = story_uuid)
-    pages = Page.objects.filter(story = story)
+    story = Story.objects.get(uuid=story_uuid)
+    pages = Page.objects.filter(story=story)
     
     context_dict = {
         'title': story.title,
