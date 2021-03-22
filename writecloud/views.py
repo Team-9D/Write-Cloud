@@ -18,6 +18,10 @@ def account(request):
     return render(request, 'writecloud/account.html')
 
 
+def signup(request):
+    return render(request, 'writecloud/signup.html')
+
+
 def user_login(request):
 
     if request.method == 'POST':
