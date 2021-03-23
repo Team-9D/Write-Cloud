@@ -2,6 +2,7 @@
 
 {% block head_block %}
     <h1>{{ title }}</h1>
+    <h2>{{ subtitle }}</h2>
     <p><b><i>by: {{ author }}</i></b></p>
     <br />
 {% endblock %}
@@ -11,5 +12,11 @@
         {{ page.content }} <br />
         <p><i>page {{ page.number }} by {{ page.author }}</i></p>
         <br />
+    {% endfor %}
+
+    <h3>Ratings</h3>
+    {% for rating in ratings %}
+        <i>{{ rating.author }},</i> <b>{{ rating.value }} / 5:</b> <br />
+        {{ rating.comment }} <br />
     {% endfor %}
 {% endblock %}

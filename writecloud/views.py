@@ -44,13 +44,20 @@ def user_logout(request):
 
 def story(request, story_uuid):
 
-    story = Story.objects.get(uuid = story_uuid)
-    pages = Page.objects.filter(story = story)
+    s = Story.objects.get(uuid = story_uuid)
+    pages = Page.objects.filter(story = s)
+    ratings = Rating.objects.filter(story = s)
+    stars = ratings.aggregate(Avg('value'))['value__avg']
+    total = ratings.aggregate(Count('value'))['value__count']
     
     context_dict = {
-        'title': story.title,
-        'author': story.author,
+        'title': s.title,
+        'author': s.author,
+        'subtitle': s.subtitle,
+        'stars': stars,
+        'total': total,
         'pages': [],
+        'ratings': [],
     }
 
     for page in pages:
@@ -60,6 +67,14 @@ def story(request, story_uuid):
             'content': page.content,
         }
         context_dict['pages'].append(page_dict)
+
+    for rating in ratings:
+        rating_dict = {
+            'value': rating.value,
+            'comment': rating.comment,
+            'author': rating.user,
+        }
+        context_dict['ratings'].append(rating_dict)
 
     return render(request, 'writecloud/story.html', context=context_dict)
 
@@ -73,8 +88,9 @@ def rankings(request):
     }
 
     for s in stories:
-        stars = Rating.objects.filter(story = s).aggregate(Avg('value'))['value__avg']
-        total = Rating.objects.filter(story = s).aggregate(Count('user'))['user__count']
+        rating = Rating.objects.filter(story = s)
+        stars = rating.aggregate(Avg('value'))['value__avg']
+        total = rating.aggregate(Count('value'))['value__count']
 
         story_dict = {
             'uuid': s.uuid,

@@ -44,7 +44,7 @@ class Story(models.Model):
 class Page(models.Model):
 
     number = models.IntegerField()
-    content = models.TextField()
+    content = models.TextField(default="")
 
     story = models.ForeignKey('Story', on_delete=models.CASCADE)
     author = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
@@ -63,6 +63,7 @@ class Page(models.Model):
 class Rating(models.Model):
 
     value = models.IntegerField()
+    comment = models.TextField(default="")
 
     user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
     story = models.ForeignKey('Story', on_delete=models.CASCADE)
@@ -72,7 +73,7 @@ class Rating(models.Model):
         verbose_name_plural = 'ratings'
 
     def __str__(self):
-        return str(self.user) + str(self.story)
+        return f"{self.story} for {self.user}"
 
     def get_absolute_url(self):
         return reverse('rating_detail', kwargs={'pk': self.pk})

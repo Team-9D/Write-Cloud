@@ -1,16 +1,15 @@
 {% extends 'writecloud/base.html' %}
 
 {% block head_block %}
-    <h1>Rankings</h1>
+    <h1>WriteCloud Top Stories</h1>
 {% endblock %}
 
 {% block body_block %}
     {% for story in stories %}
-        <a href="{% url 'writecloud:story' story.uuid %}"><b>{{ story.title }}</b></a>
-        <br />
+        <h2><a href="{% url 'writecloud:story' story.uuid %}">{{ story.title }}</a></h2>
 
-        <p>{{ story.stars }} / 5 out of {{ story.total }} ratings</p>
-        <br />
+        <p><b>{{ story.stars }} / 5</b><br />
+        out of {{ story.total }} ratings</p>
 
         <br />
     {% endfor %}
