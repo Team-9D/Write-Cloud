@@ -58,3 +58,21 @@ class Page(models.Model):
 
     def get_absolute_url(self):
         return reverse('page_detail', kwargs={'pk': self.pk})
+
+
+class Rating(models.Model):
+
+    value = models.IntegerField()
+
+    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    story = models.ForeignKey('Story', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'rating'
+        verbose_name_plural = 'ratings'
+
+    def __str__(self):
+        return str(self.user) + str(self.story)
+
+    def get_absolute_url(self):
+        return reverse('rating_detail', kwargs={'pk': self.pk})

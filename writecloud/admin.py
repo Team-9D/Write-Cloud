@@ -6,3 +6,4 @@ from .models import *
 admin.site.register(UserProfile)
 admin.site.register(Story)
 admin.site.register(Page)
+admin.site.register(Rating)

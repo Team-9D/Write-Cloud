@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('login/', views.user_login, name='login'),
     path('story/<uuid:story_uuid>', views.story, name='story'),
+    path('rankings/', views.rankings, name='rankings')
 ]

@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.urls import reverse
 from django.shortcuts import redirect, render
-from writecloud.models import Story, Page, UserProfile
+from django.db.models import Count, Avg
+from writecloud.models import *
 
 # Create your views here.
 
@@ -49,7 +50,7 @@ def story(request, story_uuid):
     context_dict = {
         'title': story.title,
         'author': story.author,
-        'pages': []
+        'pages': [],
     }
 
     for page in pages:
@@ -61,3 +62,27 @@ def story(request, story_uuid):
         context_dict['pages'].append(page_dict)
 
     return render(request, 'writecloud/story.html', context=context_dict)
+
+
+def rankings(request):
+
+    stories = Story.objects.all()
+
+    context_dict = {
+        'stories': [],
+    }
+
+    for s in stories:
+        stars = Rating.objects.filter(story = s).aggregate(Avg('value'))['value__avg']
+        total = Rating.objects.filter(story = s).aggregate(Count('user'))['user__count']
+
+        story_dict = {
+            'uuid': s.uuid,
+            'title': s.title,
+            'author': s.author,
+            'stars': stars,
+            'total': total,
+        }
+        context_dict['stories'].append(story_dict)
+
+    return render(request, 'writecloud/rankings.html', context=context_dict)
