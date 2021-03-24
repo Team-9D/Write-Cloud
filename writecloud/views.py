@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Count, Avg
 from writecloud.models import *
+from writecloud.forms import *
 
 # Create your views here.
 
@@ -44,16 +45,17 @@ def user_logout(request):
 
 def story(request, story_uuid):
 
-    s = Story.objects.get(uuid = story_uuid)
-    pages = Page.objects.filter(story = s)
-    ratings = Rating.objects.filter(story = s)
+    story = get_object_or_404(Story, pk=story_uuid)
+    pages = Page.objects.filter(story = story)
+    ratings = Rating.objects.filter(story = story)
     stars = ratings.aggregate(Avg('value'))['value__avg']
     total = ratings.aggregate(Count('value'))['value__count']
     
     context_dict = {
-        'title': s.title,
-        'author': s.author,
-        'subtitle': s.subtitle,
+        'uuid': story.uuid,
+        'title': story.title,
+        'subtitle': story.subtitle,
+        'author': story.author,
         'stars': stars,
         'total': total,
         'pages': [],
@@ -79,6 +81,35 @@ def story(request, story_uuid):
     return render(request, 'writecloud/story.html', context=context_dict)
 
 
+@login_required
+def rate(request, story_uuid):
+
+    user = request.user
+    story = get_object_or_404(Story, pk=story_uuid)
+
+    if request.method == 'POST':
+        form = RatingForm(data=request.POST)
+
+        if form.is_valid():
+            form = form.save(commit=False)
+            #form.user = user
+            #form.story = story
+            form.save()
+        
+        return HttpResponseRedirect(reverse('writecloud:index'))
+    
+    else:
+        form = RatingForm()
+
+    context_dict = {
+        'uuid': story.uuid,
+        'title': story.title,
+        'form': form,
+    }
+
+    return render(request, 'writecloud/rate.html', context=context_dict)
+
+
 def rankings(request):
 
     stories = Story.objects.all()
@@ -87,15 +118,15 @@ def rankings(request):
         'stories': [],
     }
 
-    for s in stories:
-        rating = Rating.objects.filter(story = s)
+    for story in stories:
+        rating = Rating.objects.filter(story = story)
         stars = rating.aggregate(Avg('value'))['value__avg']
         total = rating.aggregate(Count('value'))['value__count']
 
         story_dict = {
-            'uuid': s.uuid,
-            'title': s.title,
-            'author': s.author,
+            'uuid': story.uuid,
+            'title': story.title,
+            'author': story.author,
             'stars': stars,
             'total': total,
         }

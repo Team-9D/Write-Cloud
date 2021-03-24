@@ -1,0 +1,15 @@
+{% extends 'writecloud/base.html' %}
+
+{% block head_block %}
+    <h1>Rate "{{ title }}" by {{ author }}</h1>
+{% endblock %}
+
+{% block body_block %}
+    <form action="{% url 'writecloud:rate' uuid %}" method="POST">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <input type="submit" value="Submit Rating">
+    </form>
+{% endblock %}

@@ -28,14 +28,14 @@ class Story(models.Model):
     subtitle = models.CharField(max_length=60, default="")
     length = models.PositiveSmallIntegerField()
 
-    author = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='stories')
 
     class Meta:
         verbose_name = 'story'
         verbose_name_plural = 'stories'
 
     def __str__(self):
-        return self.title
+        return f"{self.author}'s \"{self.title}\""
 
     def get_absolute_url(self):
         return reverse('story_detail', kwargs={'pk': self.pk})
@@ -46,15 +46,15 @@ class Page(models.Model):
     number = models.IntegerField()
     content = models.TextField(default="")
 
-    story = models.ForeignKey('Story', on_delete=models.CASCADE)
-    author = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    story = models.ForeignKey('Story', on_delete=models.CASCADE, related_name='pages')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pages')
 
     class Meta:
         verbose_name = 'page'
         verbose_name_plural = 'pages'
 
     def __str__(self):
-        return self.content
+        return f"{self.story} page {self.number} by {self.author}"
 
     def get_absolute_url(self):
         return reverse('page_detail', kwargs={'pk': self.pk})
@@ -65,15 +65,15 @@ class Rating(models.Model):
     value = models.IntegerField()
     comment = models.TextField(default="")
 
-    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
-    story = models.ForeignKey('Story', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
+    story = models.ForeignKey('Story', on_delete=models.CASCADE, related_name='ratings')
 
     class Meta:
         verbose_name = 'rating'
         verbose_name_plural = 'ratings'
 
     def __str__(self):
-        return f"{self.story} for {self.user}"
+        return f"{self.story} rated by {self.user}"
 
     def get_absolute_url(self):
         return reverse('rating_detail', kwargs={'pk': self.pk})

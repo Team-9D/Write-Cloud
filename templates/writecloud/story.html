@@ -13,7 +13,10 @@
         <p><i>page {{ page.number }} by {{ page.author }}</i></p>
         <br />
     {% endfor %}
+{% endblock %}
 
+{% block footer_block %}
+    <a href="{% url 'writecloud:rate' uuid %}">Rate this Story</a>
     <h3>Ratings</h3>
     {% for rating in ratings %}
         <i>{{ rating.author }},</i> <b>{{ rating.value }} / 5:</b> <br />
