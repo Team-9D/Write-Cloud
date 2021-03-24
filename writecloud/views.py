@@ -4,8 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Count, Avg
-from writecloud.models import *
-from writecloud.forms import *
+from .models import *
+from .forms import *
 
 # Create your views here.
 
@@ -88,22 +88,29 @@ def rate(request, story_uuid):
     story = get_object_or_404(Story, pk=story_uuid)
 
     if request.method == 'POST':
-        form = RatingForm(data=request.POST)
+        form = RatingForm(request.POST)
 
         if form.is_valid():
             form = form.save(commit=False)
-            #form.user = user
-            #form.story = story
+            form.user = user
+            form.story = story
             form.save()
         
-        return HttpResponseRedirect(reverse('writecloud:index'))
+        else:
+            print(form.errors)
+        
+        return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
     
     else:
-        form = RatingForm()
+        form = RatingForm({
+            'user': user,
+            'story': story,
+        })
 
     context_dict = {
         'uuid': story.uuid,
         'title': story.title,
+        'author': story.author,
         'form': form,
     }
 

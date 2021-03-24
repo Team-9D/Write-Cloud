@@ -6,10 +6,24 @@
 
 {% block body_block %}
     <form action="{% url 'writecloud:rate' uuid %}" method="POST">
-    {% csrf_token %}
+        {% csrf_token %}
 
-    {{ form.as_p }}
+        <h2>Rating</h2>
+        {% for radio in form.value %}
+            {{ radio }}
+        {% endfor %}
+        <br />
 
-    <input type="submit" value="Submit Rating">
+        <h2>Comment</h2>
+        {{ form.comment }}
+        <br />
+
+        <br />
+
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+
+        <input type="submit" value="Submit Rating">
     </form>
 {% endblock %}
