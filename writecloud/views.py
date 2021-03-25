@@ -40,28 +40,39 @@ def user_login(request):
 @login_required
 def user_logout(request):
     logout(request)
-    return redirect(reverse('rango:index'))
+    return redirect(reverse('writecloud:index'))
 
 
 def story(request, story_uuid):
-
-    story = get_object_or_404(Story, pk=story_uuid)
-    pages = Page.objects.filter(story = story)
-    ratings = Rating.objects.filter(story = story)
-    stars = ratings.aggregate(Avg('value'))['value__avg']
-    total = ratings.aggregate(Count('value'))['value__count']
     
+    # get the story for the requested UUID or redirect to a 404 page
+    story = get_object_or_404(Story, pk=story_uuid)
+
+    pages = story.pages.all()
+    reviews = story.reviews.all()
+    stars = reviews.aggregate(Avg('stars'))['stars__avg']
+    total = reviews.aggregate(Count('stars'))['stars__count']
+    
+    # initialise the context dictionary to pass to the template
+    # "None" fields will be overwritten if meaningful
     context_dict = {
         'uuid': story.uuid,
         'title': story.title,
         'subtitle': story.subtitle,
         'author': story.author,
-        'stars': stars,
-        'total': total,
         'pages': [],
-        'ratings': [],
+        'stars': f"{stars:.1f}",
+        'total': total,
+        'user_authenticated': None,
+        'user_review': {
+            'present': None,
+            'stars': None,
+            'body': None,
+        },
+        'reviews': [],
     }
-
+    
+    # unpack all pages of this story for display
     for page in pages:
         page_dict = {
             'number': page.number,
@@ -70,54 +81,79 @@ def story(request, story_uuid):
         }
         context_dict['pages'].append(page_dict)
 
-    for rating in ratings:
-        rating_dict = {
-            'value': rating.value,
-            'comment': rating.comment,
-            'author': rating.user,
+    # if the user is logged in...
+    user_authenticated = request.user.is_authenticated
+    if user_authenticated:
+        
+        context_dict.update({
+            'user_authenticated': True,
+        })
+
+        # ...and has already rated this story:
+        if reviews.filter(author = request.user).exists():
+            
+            # store their review separately from the others to display it first
+            user_review = reviews.get(author = request.user)
+            context_dict.update({
+                'user_review': {
+                    'present': True,
+                    'stars': user_review.stars,
+                    'body': user_review.body,
+                }
+            })
+            reviews = reviews.exclude(author = request.user)
+        
+        # ...but has not rated this story yet:
+        else:
+
+            # if the request is POST, validate and save the form
+            if request.method == 'POST':
+                form = ReviewForm(request.POST)
+
+                if form.is_valid():
+                    # overwrite default form bindings for security
+                    form = form.save(commit=False)
+                    form.author = request.user
+                    form.story = story
+                    form.save()
+                
+                return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
+
+            # if the request is GET, pass them the default bound form
+            else:
+                form = ReviewForm({
+                    'author': request.user,
+                    'story': story,
+                })
+
+                context_dict.update({
+                    'form': form,
+                })
+
+    # if the user is not logged in:
+    else:
+
+        # set the flags to show them a login link
+        context_dict.update({
+            'user_authenticated': False,
+            'user_review': {
+                'present': False,
+            }
+        })
+
+    # unpack all reviews to this story for display
+    for review in reviews:
+        review_dict = {
+            'stars': review.stars,
+            'body': review.body,
+            'author': review.author,
         }
-        context_dict['ratings'].append(rating_dict)
+        context_dict['reviews'].append(review_dict)
 
     return render(request, 'writecloud/story.html', context=context_dict)
 
 
-@login_required
-def rate(request, story_uuid):
-
-    user = request.user
-    story = get_object_or_404(Story, pk=story_uuid)
-
-    if request.method == 'POST':
-        form = RatingForm(request.POST)
-
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.user = user
-            form.story = story
-            form.save()
-        
-        else:
-            print(form.errors)
-        
-        return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
-    
-    else:
-        form = RatingForm({
-            'user': user,
-            'story': story,
-        })
-
-    context_dict = {
-        'uuid': story.uuid,
-        'title': story.title,
-        'author': story.author,
-        'form': form,
-    }
-
-    return render(request, 'writecloud/rate.html', context=context_dict)
-
-
-def rankings(request):
+def top_stories(request):
 
     stories = Story.objects.all()
 
@@ -126,17 +162,17 @@ def rankings(request):
     }
 
     for story in stories:
-        rating = Rating.objects.filter(story = story)
-        stars = rating.aggregate(Avg('value'))['value__avg']
-        total = rating.aggregate(Count('value'))['value__count']
+        review = story.reviews.all()
+        stars = review.aggregate(Avg('stars'))['stars__avg']
+        total = review.aggregate(Count('stars'))['stars__count']
 
         story_dict = {
             'uuid': story.uuid,
             'title': story.title,
             'author': story.author,
-            'stars': stars,
+            'stars': f"{stars:.1f}",
             'total': total,
         }
         context_dict['stories'].append(story_dict)
 
-    return render(request, 'writecloud/rankings.html', context=context_dict)
+    return render(request, 'writecloud/top_stories.html', context=context_dict)

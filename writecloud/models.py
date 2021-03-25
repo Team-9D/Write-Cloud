@@ -52,6 +52,12 @@ class Page(models.Model):
     class Meta:
         verbose_name = 'page'
         verbose_name_plural = 'pages'
+        constraints = [
+            models.UniqueConstraint(
+                name='unique_story_author_page',
+                fields=['story', 'author']
+            ),
+        ]
 
     def __str__(self):
         return f"{self.story} page {self.number} by {self.author}"
@@ -60,20 +66,26 @@ class Page(models.Model):
         return reverse('page_detail', kwargs={'pk': self.pk})
 
 
-class Rating(models.Model):
+class Review(models.Model):
 
-    value = models.IntegerField()
-    comment = models.TextField(default="")
+    stars = models.IntegerField()
+    body = models.TextField(default="")
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
-    story = models.ForeignKey('Story', on_delete=models.CASCADE, related_name='ratings')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
+    story = models.ForeignKey('Story', on_delete=models.CASCADE, related_name='reviews')
 
     class Meta:
-        verbose_name = 'rating'
-        verbose_name_plural = 'ratings'
+        verbose_name = 'review'
+        verbose_name_plural = 'reviews'
+        constraints = [
+            models.UniqueConstraint(
+                name='unique_author_story_review',
+                fields=['author', 'story']
+            ),
+        ]
 
     def __str__(self):
-        return f"{self.story} rated by {self.user}"
+        return f"{self.story} reviewed by {self.author}"
 
     def get_absolute_url(self):
-        return reverse('rating_detail', kwargs={'pk': self.pk})
+        return reverse('review_detail', kwargs={'pk': self.pk})
