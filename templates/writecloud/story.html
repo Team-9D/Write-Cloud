@@ -2,6 +2,7 @@
 
 {% block head_block %}
     <h1>{{ title }}</h1>
+    <h2>{{ subtitle }}</h2>
     <p><b><i>by: {{ author }}</i></b></p>
     <br />
 {% endblock %}
@@ -11,5 +12,48 @@
         {{ page.content }} <br />
         <p><i>page {{ page.number }} by {{ page.author }}</i></p>
         <br />
+    {% endfor %}
+{% endblock %}
+
+{% block footer_block %}
+    {% if user_authenticated %}
+        {% if user_review.present %}
+            <h2>Your review</h2>
+            {{ user_review.stars }} / 5 <br />
+            {{ user_review.body}} <br />
+        {% else %}
+            <h2>Review this Story</h2>
+            <form action="{% url 'writecloud:story' uuid %}" method="POST">
+                {% csrf_token %}
+
+                <b>Vote this Story:</b> <br />
+                {% for radio in form.stars %}
+                    {{ radio }}
+                {% endfor %}
+                <br />
+
+                <b>Leave your comments here:</b> <br />
+                {{ form.body }}
+                <br />
+
+                <br />
+
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                <input type="submit" value="Submit review">
+            </form>
+        {% endif %}
+    {% else %}
+        <a href="{% url 'writecloud:login' %}">Log in</a> to review this Story
+    {% endif %}
+
+    <h2>Reviews</h2>
+    <p><b>{{ stars }} / 5</b> stars out of a total of <b>{{ total }}</b> reviews</p>
+
+    {% for review in reviews %}
+        <i>{{ review.author }},</i> <b>{{ review.stars }} / 5:</b> <br />
+        {{ review.body }} <br />
     {% endfor %}
 {% endblock %}
