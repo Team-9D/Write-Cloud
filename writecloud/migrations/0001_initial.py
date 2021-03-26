@@ -41,20 +41,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Review',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('stars', models.IntegerField()),
-                ('body', models.TextField(default='')),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to=settings.AUTH_USER_MODEL)),
-                ('story', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to='writecloud.Story')),
-            ],
-            options={
-                'verbose_name': 'review',
-                'verbose_name_plural': 'reviews',
-            },
-        ),
-        migrations.CreateModel(
             name='Page',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -67,10 +53,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'page',
                 'verbose_name_plural': 'pages',
             },
-        ),
-        migrations.AddConstraint(
-            model_name='review',
-            constraint=models.UniqueConstraint(fields=('author', 'story'), name='unique_author_story_review'),
         ),
         migrations.AddConstraint(
             model_name='page',
