@@ -5,9 +5,11 @@ import uuid
 
 # Create your models here.
 
+
 class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(default="images/default-avatar.png", upload_to='images/')
 
     class Meta:
         verbose_name = 'user'

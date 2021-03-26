@@ -2,15 +2,25 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Count, Avg
+from django.core.files.storage import FileSystemStorage
 from .models import *
 from .forms import *
 
 # Create your views here.
 
+
 def index(request):
-    return HttpResponse("Hello, world. You're at the WriteCloud index.")
+    return render(request, 'writecloud/index.html')
+
+
+def account(request):
+    return render(request, 'writecloud/account.html')
+
+
+def signup(request):
+    return render(request, 'writecloud/signup.html')
 
 
 def user_login(request):
