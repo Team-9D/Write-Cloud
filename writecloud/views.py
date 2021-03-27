@@ -29,7 +29,7 @@ def sign_up(request):
             login(request, user)
             return redirect(reverse('writecloud:index'))
         else:
-            return redirect(reverse('writecloud:signup'))
+            return render(request, 'writecloud/signup_fail.html')
     else:
         return render(request, 'writecloud/signup.html')
 

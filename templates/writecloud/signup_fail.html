@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+{% load static %}
+<style>
+img {display: block;
+    margin-left: auto;
+    margin-right: auto;}
+nav {
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #2350d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+    margin-left: 18%;
+    margin-right: 18%;
+    border-radius: 15px;
+}
+.img-fluid {
+    width: 300px;
+    height: auto;
+}
+.resize-header {
+    width: 80px;
+}
+header {
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #2350d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+    line-height: 3.5em;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0 50%;
+	}
+}
+
+.limit{
+    font-size : 1vw;
+    font-family: "Apple Symbols";
+    color: #23d5d2 !important;
+}
+
+li {
+    list-style-type: none;
+}
+
+.row{
+    margin-top: 1% !important;
+}
+
+h4{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1% !important;
+    color: #23d5d2 !important;
+}
+
+form{
+    display: flex;
+    justify-content: center;
+}
+
+input{
+    font-size : 1.8vw;
+    font-family: "Apple Symbols";
+    border-radius: 5px;
+    color: #23d5d2 !important;
+}
+
+#credentials{
+    margin-top: 1% !important;
+    color: #ee7752;
+}
+
+::placeholder{
+    color: #ee7752;
+}
+
+p {
+    color: #ee7752;
+}
+
+#in{
+    border-radius: 5px;
+    box-shadow: 0 0 5px #ee7752;
+    background-color: #f7ddd4;
+}
+</style>
+
+<html lang="en">
+<head>
+    <title>WriteCloud-Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+    <body>
+     <header class="navbar navbar-default">
+          <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li><img class="resize-header" src="{% static "Logo.png" %}"/></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a class="limit" href="#">Contact Us</a></li>
+            </ul>
+          </div>
+        </header>
+
+        <nav class="navbar navbar-expand-lg">
+            <img class="img-fluid" src="{% static "Logo.png" %}"/>
+        </nav>
+        <div class="row" id="credentials">
+            <h4>Sign Up into Your Write Cloud</h4>
+        </div>
+        <form id="signup_form" method="post" action="{% url 'writecloud:signup' %}">
+            <div class="form-group">
+                {% csrf_token %}
+                <div class="row">
+                    <a id="credentials">Username</a>
+                </div>
+                <div class="row">
+                    <input type="text" id="in" name="username" class="form-control" placeholder="Enter Your Username" />
+                </div>
+                <br>
+                <div class="row">
+                    <a id="credentials">Password</a>
+                </div>
+                <div class="row">
+                    <input type="password" id="in"  name="password" class="form-control" placeholder="Enter Your Password"/>
+                </div>
+                <br>
+                <div class="row">
+                    <button type="submit" id="in" class="btn btn-primary pull-right"><a id="credentials">Sign Up</a></button>
+                </div>
+                <div class="row">
+                    <p>Enter unique correct Credentials</p>
+                </div>
+            </div>
+        </form>
+    </body>
+
+</html>
