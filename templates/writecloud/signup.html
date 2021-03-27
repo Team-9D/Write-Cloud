@@ -116,7 +116,7 @@ input{
         <div class="row" id="credentials">
             <h4>Sign Up into Your Write Cloud</h4>
         </div>
-        <form id="login_form" method="post" action="{% url 'writecloud:login' %}">
+        <form id="signup_form" method="post" action="{% url 'writecloud:signup' %}">
             <div class="form-group">
                 {% csrf_token %}
                 <div class="row">

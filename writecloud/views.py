@@ -1,11 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Count, Avg
-from django.core.files.storage import FileSystemStorage
-from .models import *
+from django.contrib.auth.models import User
+
 from .forms import *
 
 # Create your views here.
@@ -19,8 +18,20 @@ def account(request):
     return render(request, 'writecloud/account.html')
 
 
-def signup(request):
-    return render(request, 'writecloud/signup.html')
+def sign_up(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if not User.objects.filter(username=username).exists():
+            user = User.objects.create_user(username, password)
+            user.save()
+            login(request, user)
+            return redirect(reverse('writecloud:index'))
+        else:
+            return redirect(reverse('writecloud:signup'))
+    else:
+        return render(request, 'writecloud/signup.html')
 
 
 def user_login(request):
@@ -38,7 +49,7 @@ def user_login(request):
 
             else:
                 return HttpResponse("Your WriteCloud account has been disabled.")
-        
+
         else:
             print(f"Login details not valid: {username}, {password}")
             return HttpResponse("The login details provided are invalid.")
