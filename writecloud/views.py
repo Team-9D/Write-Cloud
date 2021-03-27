@@ -13,6 +13,9 @@ from .forms import *
 def index(request):
     return render(request, 'writecloud/index.html')
 
+def contact(request):
+    return render(request, 'writecloud/contact.html')
+
 
 def account(request):
     return render(request, 'writecloud/account.html')

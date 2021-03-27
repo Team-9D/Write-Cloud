@@ -44,13 +44,22 @@ header {
     color: #23d5d2 !important;
 }
 
+.row{
+    margin-top: 5%;
+}
+
+.inner{
+    color: #23d5d2;
+    font-size : 1.4vw;
+    font-family: "Apple Symbols";
+    display: flex;
+    justify-content: center;
+}
+
 li {
     list-style-type: none;
 }
 
-.row{
-    margin-top: 1% !important;
-}
 
 h4{
     display: flex;
@@ -59,31 +68,13 @@ h4{
     color: #23d5d2 !important;
 }
 
-form{
+
+p {
+    color: #ee7752;
+    font-size : 1.4vw;
+    font-family: "Apple Symbols";
     display: flex;
     justify-content: center;
-}
-
-input{
-    font-size : 1.8vw;
-    font-family: "Apple Symbols";
-    border-radius: 5px;
-    color: #23d5d2 !important;
-}
-
-#credentials{
-    margin-top: 1% !important;
-    color: #ee7752;
-}
-
-::placeholder{
-    color: #ee7752;
-}
-
-#in{
-    border-radius: 5px;
-    box-shadow: 0 0 5px #ee7752;
-    background-color: #f7ddd4;
 }
 </style>
 
@@ -113,31 +104,21 @@ input{
         <nav class="navbar navbar-expand-lg">
             <img class="img-fluid" src="{% static "Logo.png" %}"/>
         </nav>
-        <div class="row" id="credentials">
-            <h4>Log into Your Write Cloud</h4>
-        </div>
-        <form id="login_form" method="post" action="{% url 'writecloud:login' %}">
-            <div class="form-group">
-                {% csrf_token %}
-                <div class="row">
-                    <a id="credentials">Username</a>
-                </div>
-                <div class="row">
-                    <input type="text" id="in" name="username" class="form-control" placeholder="Enter Your Username" />
-                </div>
-                <br>
-                <div class="row">
-                    <a id="credentials">Password</a>
-                </div>
-                <div class="row">
-                    <input type="password" id="in"  name="password" class="form-control" placeholder="Enter Your Password"/>
-                </div>
-                <br>
-                <div class="row">
-                    <button type="submit" id="in" class="btn btn-primary pull-right"><a id="credentials">Login</a></button>
-                </div>
-            </div>
-        </form>
+
+     <div class="row">
+            <p>We are the WriteCloud Team</p>
+            <p class="inner">Matilda Bradley</p>
+            <p class="inner">Marianne Marcelline</p>
+            <p class="inner">Giorgio Ciacchella</p>
+            <p class="inner">Kiril Bikov</p>
+     </div>
+
+    <div class="row">
+            <p>Email </p>
+            <p class="inner">team9duofg@gmail.com</p>
+     </div>
+
+
     </body>
 
 </html>
