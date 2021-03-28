@@ -67,14 +67,14 @@ li {
               <div class="container-fluid">
                 <ul class="nav navbar-nav">
                     <li><img class="resize-header" src="{% static "Logo.png" %}"/></li>
-                    <li ><a class="limit" href="#">Home</a></li>
-                    <li><a class="limit" href="#">Start Story</a></li>
+                    <li ><a class="limit" href="{% url 'writecloud:index' %}">Home</a></li>
+                    <li><a class="limit" href="{% url 'writecloud:create_story' %}">Start Story</a></li>
                     <li><a class="limit" href="#">Continue Story</a></li>
-                    <li><a class="limit" href="#">Top Stories</a></li>
+                    <li><a class="limit" href="{% url 'writecloud:top_stories' %}">Top Stories</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a class="limit" href="/account/">My Account</a></li>
-                    <li><a class="limit" href="/contact/">Contact Us</a></li>
+                    <li><a class="limit" href="{% url 'writecloud:account' %}">My Account</a></li>
+                    <li><a class="limit" href="{% url 'writecloud:contact' %}">Contact Us</a></li>
                 </ul>
               </div>
             </header>
@@ -87,7 +87,7 @@ li {
                     <li><img class="resize-header" src="{% static "Logo.png" %}"/></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a class="limit" href="/contact/">Contact Us</a></li>
+                    <li><a class="limit" href="{% url 'writecloud:contact' %}">Contact Us</a></li>
                 </ul>
               </div>
             </header>
