@@ -41,15 +41,16 @@ input{
 
 ::placeholder{
     color: #ee7752 !important;
-    font-size : 0.9vw;
+    font-size : 1.2vw;
     font-family: "Apple Symbols";
 }
 
 #in{
     box-shadow: 0 0 5px #ee7752;
     background-color: #f7ddd4;
-    font-size : 0.9vw;
+    font-size : 1.2vw;
     border: none;
+    margin-top: 2%;
 }
 
 #templates{
@@ -81,41 +82,49 @@ input{
 
 textarea[id^="input1"]{
     border: none !important;
+    background-color: white !important;
+    color: #ee7752;
 }
 
 textarea[id^="input2"]::placeholder{
     color: #23d5d2 !important;
-    font-size : 0.9vw;
+    font-size : 1.2vw;
     font-family: "Apple Symbols";
 }
 
 textarea[id^="input2"]{
     border: none !important;
+    background-color: white !important;
+     color: #23d5d2;
 }
 
 textarea[id^="input3"]::placeholder{
     color: #ee7752 !important;
-    font-size : 0.9vw;
+    font-size : 1.2vw;
     font-family: "Apple Symbols";
 }
 
 textarea[id^="input3"]{
     border: none !important;
     background-color: #23d5d2 !important;
+    color: #ee7752;
 }
 
 textarea[id^="input4"]::placeholder{
     color: #23d5d2 !important;
-    font-size : 0.9vw;
+    font-size : 1.2vw !important;
     font-family: "Apple Symbols";
 }
 
 textarea[id^="input4"]{
     border: none !important;
     background-color: #ee7752 !important;
+    color: #23d5d2;
 }
 
+
 </style>
+
 
     <div class="row">
         <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
@@ -123,9 +132,8 @@ textarea[id^="input4"]{
         </div>
     </div>
     <div class="row">
-        <form id="create_story" method="post" action="{% url 'writecloud:create_story' %}">
+        <form id="create_story" method="post"  action="{% url 'writecloud:create_story' %}">{% csrf_token %}
             <div class="form-group">
-                {% csrf_token %}
                 <div class="row">
                     <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
                         <input type="text" id="in" name="title" class="form-control" placeholder="Enter Title" />
@@ -136,6 +144,9 @@ textarea[id^="input4"]{
                     <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
                         <input type="text" id="in"  name="length" class="form-control" placeholder="Enter Number of Pages"/>
                     </div>
+                    <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
+                        <input readonly onclick="imagesFunction()" type="text" id="in"  name="include_images" class="form-control" placeholder="No Images included"/>
+                    </div>
                 </div>
                 <div class="row" id="templates">
                     <div class="col-md-2 col-sm-2 col-lg-2" >
@@ -143,24 +154,20 @@ textarea[id^="input4"]{
                      <div id="single_template1" class="col-md-4 col-sm-4 col-lg-4">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-lg-12">
-                                <form>
                                   <div class="form-group">
-                                      <textarea class="form-control" placeholder="Begin your story with template 1"
-                                                id="input1" rows="10""></textarea>
+                                      <textarea readonly class="form-control" placeholder="Begin your story with template 1"
+                                                id="input1" name="template1" rows="10"></textarea>
                                   </div>
-                                </form>
                         </div>
                     </div>
                   </div>
                   <div id="single_template3" class="col-md-4 col-sm-4 col-lg-4">
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-lg-12">
-                            <form id="form">
                               <div class="form-group">
-                                  <textarea class="form-control" placeholder="Begin your story with template 2"
-                                            id="input2" rows="10"></textarea>
+                                  <textarea readonly class="form-control" placeholder="Begin your story with template 2"
+                                            id="input2" name="template2" rows="10"></textarea>
                               </div>
-                            </form>
                         </div>
                     </div>
                   </div>
@@ -171,24 +178,20 @@ textarea[id^="input4"]{
                      <div id="single_template2" class="col-md-4 col-sm-4 col-lg-4">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-lg-12">
-                                <form>
                                   <div class="form-group">
-                                      <textarea class="form-control" placeholder="Begin your story with template 3"
-                                                id="input3" rows="10"></textarea>
+                                      <textarea readonly class="form-control" placeholder="Begin your story with template 3"
+                                                id="input3" name="template3" rows="10"></textarea>
                                   </div>
-                                </form>
                         </div>
                     </div>
                   </div>
                   <div id="single_template4" class="col-md-4 col-sm-4 col-lg-4">
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-lg-12">
-                            <form>
                               <div class="form-group">
-                                  <textarea class="form-control" placeholder="Begin your story with template 4"
-                                                id="input4" rows="10"></textarea>
+                                  <textarea readonly class="form-control" placeholder="Begin your story with template 4"
+                                                id="input4" name="template4"  rows="10"></textarea>
                               </div>
-                            </form>
                         </div>
                     </div>
                   </div>
@@ -199,5 +202,45 @@ textarea[id^="input4"]{
             </div>
         </form>
     </div>
+
+<script>
+document.getElementById("input1").addEventListener("click", ()=>{
+    $('#input1').val('✓');
+    $('#input2').val('');
+    $('#input3').val('');
+    $('#input4').val('');
+
+});
+document.getElementById("input2").addEventListener("click", ()=>{
+    $('#input2').val('✓');
+    $('#input1').val('');
+    $('#input3').val('');
+    $('#input4').val('');
+
+});
+document.getElementById("input3").addEventListener("click", ()=>{
+    $('#input3').val('✓');
+    $('#input1').val('');
+    $('#input2').val('');
+    $('#input4').val('');
+
+});
+document.getElementById("input4").addEventListener("click", ()=>{
+    $('#input4').val('✓');
+    $('#input1').val('');
+    $('#input2').val('');
+    $('#input3').val('');
+
+});
+let timesClicked = 0;
+function imagesFunction(){
+    timesClicked++;
+    if (timesClicked%2 !== 0){
+        $('input[name="include_images"]').val('Images Included');
+    } else{
+        $('input[name="include_images"]').val('');
+    }
+}
+</script>
 
 {% endblock %}

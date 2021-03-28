@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Count, Avg
+
 from writecloud.models import Story
 from django.contrib.auth.models import User
 
@@ -74,7 +75,19 @@ def create(request):
         title = request.POST.get('title')
         subtitle = request.POST.get('subtitle')
         length = request.POST.get('length')
-        Story.objects.create(title=title, subtitle=subtitle, length=length, author=request.user)
+        template = 1
+        include_images = False
+        print(request.POST.get('template2'))
+        if request.POST.get('template2') == '✓':
+            template = 2
+        if request.POST.get('template3') == '✓':
+            template = 3
+        if request.POST.get('template4') == '✓':
+            template = 4
+        if request.POST.get('include_images') == 'Images Included':
+            include_images = True
+        Story.objects.create(title=title, subtitle=subtitle, length=length, author=request.user, template=template,
+                             include_images=include_images)
     return render(request, 'writecloud/createStory.html')
 
 
