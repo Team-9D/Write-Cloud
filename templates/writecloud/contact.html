@@ -1,49 +1,11 @@
+{% extends "writecloud/base.html" %}
+
 <!DOCTYPE html>
 {% load static %}
+{% block header_logged_in %}
+    {% endblock %}
+    {% block body_block %}
 <style>
-img {display: block;
-    margin-left: auto;
-    margin-right: auto;}
-nav {
-	background: linear-gradient(-45deg, #ee7752, #e73c7e, #2350d5, #23d5ab);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
-    margin-left: 18%;
-    margin-right: 18%;
-    border-radius: 15px;
-}
-.img-fluid {
-    width: 300px;
-    height: auto;
-}
-.resize-header {
-    width: 80px;
-}
-header {
-	background: linear-gradient(-45deg, #ee7752, #e73c7e, #2350d5, #23d5ab);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
-    line-height: 3.5em;
-}
-
-@keyframes gradient {
-	0% {
-		background-position: 0 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0 50%;
-	}
-}
-
-.limit{
-    font-size : 1vw;
-    font-family: "Apple Symbols";
-    color: #23d5d2 !important;
-}
-
 .row{
     margin-top: 5%;
 }
@@ -56,19 +18,6 @@ header {
     justify-content: center;
 }
 
-li {
-    list-style-type: none;
-}
-
-
-h4{
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1% !important;
-    color: #23d5d2 !important;
-}
-
-
 p {
     color: #ee7752;
     font-size : 1.4vw;
@@ -77,33 +26,6 @@ p {
     justify-content: center;
 }
 </style>
-
-<html lang="en">
-<head>
-    <title>WriteCloud-Home</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-
-    <body>
-     <header class="navbar navbar-default">
-          <div class="container-fluid">
-            <ul class="nav navbar-nav">
-                <li><img class="resize-header" src="{% static "Logo.png" %}"/></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a class="limit" href="/contact/">Contact Us</a></li>
-            </ul>
-          </div>
-        </header>
-
-        <nav class="navbar navbar-expand-lg">
-            <img class="img-fluid" src="{% static "Logo.png" %}"/>
-        </nav>
 
      <div class="row">
             <p>We are the WriteCloud Team</p>
@@ -118,7 +40,4 @@ p {
             <p class="inner">team9duofg@gmail.com</p>
      </div>
 
-
-    </body>
-
-</html>
+{% endblock %} }}

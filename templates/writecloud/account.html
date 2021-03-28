@@ -1,76 +1,19 @@
+{% extends "writecloud/base.html" %}
+
 <!DOCTYPE html>
 {% load static %}
+{% block header_logged_in %}
+{% endblock %}
+{% block header_logo %}
+{% endblock %}
+{% block body_block %}
 <style>
-img {display: block;
-    margin-left: auto;
-    margin-right: auto;}
-
-.resize-header {
-    width: 80px;
-}
-header {
-	background: linear-gradient(-45deg, #ee7752, #e73c7e, #2350d5, #23d5ab);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
-    line-height: 3.5em;
-}
-
-@keyframes gradient {
-	0% {
-		background-position: 0 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0 50%;
-	}
-}
-
-.limit{
-    font-size : 1vw;
-    font-family: "Apple Symbols";
-    color: #23d5d2 !important;
-}
-
-li {
-    list-style-type: none;
-}
-
 #profile-container img {
     width: 150px;
     height: 150px;
 }
 </style>
 
-<html lang="en">
-<head>
-    <title>WriteCloud-Home</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-
-    <body>
-      <header class="navbar navbar-default">
-          <div class="container-fluid">
-            <ul class="nav navbar-nav">
-                <li><img class="resize-header" src="{% static "Logo.png" %}"/></li>
-                <li ><a class="limit" href="#">Home</a></li>
-                <li><a class="limit" href="#">Start Story</a></li>
-                <li><a class="limit" href="#">Continue Story</a></li>
-                <li><a class="limit" href="#">Top Stories</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a class="limit" href="/account/">My Account</a></li>
-                <li><a class="limit" href="/contact/">Contact Us</a></li>
-            </ul>
-          </div>
-        </header>
     {% csrf_token %}
       <form id="update_user_form" method="POST" action=""
                             enctype="multipart/form-data">{% csrf_token %}
@@ -82,5 +25,5 @@ li {
 
     </body>
 
-</html>
+{% endblock %}
 

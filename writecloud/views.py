@@ -13,6 +13,7 @@ from .forms import *
 def index(request):
     return render(request, 'writecloud/index.html')
 
+
 def contact(request):
     return render(request, 'writecloud/contact.html')
 
@@ -65,6 +66,10 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('writecloud:index'))
+
+
+def create(request):
+    return render(request, 'writecloud/createStory.html', context)
 
 
 def story(request, story_uuid):
