@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Count, Avg
+from writecloud.models import Story
 from django.contrib.auth.models import User
 
 from .forms import *
@@ -69,7 +70,12 @@ def user_logout(request):
 
 
 def create(request):
-    return render(request, 'writecloud/createStory.html', context)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        subtitle = request.POST.get('subtitle')
+        length = request.POST.get('length')
+        Story.objects.create(title=title, subtitle=subtitle, length=length, author=request.user)
+    return render(request, 'writecloud/createStory.html')
 
 
 def story(request, story_uuid):
