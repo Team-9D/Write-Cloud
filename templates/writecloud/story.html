@@ -3,12 +3,144 @@
 {% endblock %}
 {% block header_logo %}
 {% endblock %}
+{% load static %}
 
 {% block body_block %}
-    <h1>{{ title }}</h1>
-    <h2>{{ subtitle }}</h2>
-    <p><b><i>by: {{ author }}</i></b></p>
-    <br />
+<style>
+.inside{
+    font-size : 2vw;
+    font-family: "Apple Symbols";
+    color: #ee7752;
+    margin-left: 5%;
+}
+#sub{
+    font-size : 1.2vw !important;
+    margin-bottom: 2%;
+}
+#author{
+    font-size : 1.5vw !important;
+    margin-bottom: 5%;
+    color: #23d5d2 !important;
+}
+.card{
+    margin-left:25%;
+    margin-right:25%;
+    background: #23d5d2;
+    border-radius: 15px;
+}
+textarea{
+    width: 100%;
+    background: #23d5d2;
+    border: none !important;
+}
+#page{
+    display: flex !important;
+    justify-content: center;
+}
+
+.profile-images-card{
+    margin: auto;
+    display: table;
+    background: #fff;
+    padding: 30px 50px;
+}
+
+.profile-images{
+    width: 50px;
+    height: 75px;
+    overflow: hidden;
+}
+.profile-images img{
+    object-fit:cover;
+    width: 50%;
+    height: 50%;
+}
+#fileupload{
+    display: none;
+}
+#image{
+    margin-top: 3%;
+}
+textarea{
+    margin-top: 3%;
+    margin-left: 3%;
+}
+#upload-img {
+    width: 12vw;
+    height: 14vw;
+    object-fit: fill;
+}
+
+{#display: block;#}
+    {#position: absolute;#}
+    {#width: 50%;#}
+    {#height: 50%;#}
+    {#object-fit: contain;#}
+    {#transform: translate(-50%, -50%);#}
+  {#height: 85%;#}
+  {#width: 85%;#}
+  {#overflow: hidden;#}
+  {#border: solid 1px #000;#}
+  {#margin-left: 10px;#}
+  {#margin-top: 10px;#}
+  {#background-repeat: no-repeat;#}
+  {#background-position: center !important;#}
+  {#background-size: contain;#}
+{#}#}
+</style>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-lg-6">
+            <p class="inside">{{ title }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-lg-6">
+            <p class="inside" id="sub">{{ subtitle }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-lg-6">
+            <p class="inside" id="author">By {{ author }}</p>
+        </div>
+    </div>
+    <div class="card" >
+        <div class="row">
+            <div class="col-md-8 col-sm-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-lg-12">
+                              <div>
+                                  {% for page in pages %}
+                                        {% if forloop.first %}
+                                  <textarea  readonly placeholder={{ page.content }} rows="25"></textarea>
+                                    {% endif %}
+                                {% endfor %}
+                              </div>
+                        </div>
+                    </div>
+            </div>
+            <div id ="image" class="col-md-3 col-sm-3 col-lg-3">
+                <div class="row">
+                    <div class="col-md-2 col-sm-2 col-lg-2">
+                                <div onclick="uploadFunction()" class="imgbox">
+                                    <img src="{% static "upload.png" %}" id="upload-img">
+                                </div>
+                            <div class="custom-file">
+                                <input  type="file" id="fileupload">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="page">
+                {% for page in pages %}
+                    {% if forloop.first %}
+                        <p>{{ page.number }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
     {% for page in pages %}
         {{ page.content }} <br />
         <p><i>page {{ page.number }} by {{ page.author }}</i></p>
@@ -57,4 +189,9 @@
         <i>{{ review.author }},</i> <b>{{ review.stars }} / 5:</b> <br />
         {{ review.body }} <br />
     {% endfor %}
+<script>
+function uploadFunction(){
+    document.getElementById("fileupload").click();
+}
+</script>
 {% endblock %}
