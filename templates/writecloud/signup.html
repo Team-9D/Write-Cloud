@@ -46,6 +46,12 @@ input{
     background-color: #f7ddd4;
     font-size : 0.7vw;
 }
+
+#fail{
+    color: #ee7752;
+    display: flex;
+    justify-content: center;
+}
 </style>
 
 <div class="row" id="credentials">
@@ -71,6 +77,11 @@ input{
         <div class="row">
             <button type="submit" id="in" class="btn btn-primary pull-right"><a id="credentials">Sign Up</a></button>
         </div>
+        {% if fail %}
+            <div class="row" id="fail">
+                <p>Enter unique correct Credentials</p>
+            </div>
+        {% endif  %}
     </div>
 </form>
 {% endblock %}

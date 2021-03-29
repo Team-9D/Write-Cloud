@@ -30,14 +30,14 @@ def sign_up(request):
         password = request.POST.get('password')
 
         if not User.objects.filter(username=username).exists():
-            user = User.objects.create_user(username, password)
+            user = User.objects.create_user(username=username, email=None, password=password)
             user.save()
             login(request, user)
             return redirect(reverse('writecloud:index'))
         else:
-            return render(request, 'writecloud/signup_fail.html')
+            return render(request, 'writecloud/signup.html', context={'fail': True})
     else:
-        return render(request, 'writecloud/signup.html')
+        return render(request, 'writecloud/signup.html', context={'fail': False})
 
 
 def user_login(request):
@@ -54,14 +54,13 @@ def user_login(request):
                 return redirect(reverse('writecloud:index'))
 
             else:
-                return HttpResponse("Your WriteCloud account has been disabled.")
+                return render(request, 'writecloud/login.html', context={'disabled': True, 'fail': False})
 
         else:
-            print(f"Login details not valid: {username}, {password}")
-            return HttpResponse("The login details provided are invalid.")
+            return render(request, 'writecloud/login.html', context={'disabled': False, 'fail': True})
 
     else:
-        return render(request, 'writecloud/login.html')
+        return render(request, 'writecloud/login.html', context={'disabled': False, 'fail': False})
 
 
 @login_required
@@ -218,7 +217,7 @@ def top_stories(request):
             'uuid': story.uuid,
             'title': story.title,
             'author': story.author,
-            'stars': f"{stars:.1f}",
+            # 'stars': f"{stars:.1f}",
             'total': total,
         }
         context_dict['stories'].append(story_dict)
