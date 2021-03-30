@@ -3,12 +3,13 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 import uuid
+import os
+
 
 # Create your models here.
 
 
 class UserProfile(models.Model):
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default="images/default-avatar.png", upload_to='images/')
 
@@ -24,7 +25,6 @@ class UserProfile(models.Model):
 
 
 class Story(models.Model):
-
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     title = models.CharField(max_length=30)
@@ -33,7 +33,7 @@ class Story(models.Model):
     template = models.IntegerField(
         default=1,
         validators=[MaxValueValidator(4), MinValueValidator(1)]
-     )
+    )
     include_images = models.BooleanField(default=False)
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='stories')
@@ -50,9 +50,9 @@ class Story(models.Model):
 
 
 class Page(models.Model):
-
     number = models.IntegerField()
     content = models.TextField(default="")
+    image = models.ImageField(default=None)
 
     story = models.ForeignKey('Story', on_delete=models.CASCADE, related_name='pages')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pages')
@@ -75,7 +75,6 @@ class Page(models.Model):
 
 
 class Review(models.Model):
-
     stars = models.IntegerField()
     body = models.TextField(default="")
 

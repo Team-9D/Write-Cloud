@@ -38,23 +38,6 @@ textarea{
     justify-content: center;
 }
 
-.profile-images-card{
-    margin: auto;
-    display: table;
-    background: #fff;
-    padding: 30px 50px;
-}
-
-.profile-images{
-    width: 50px;
-    height: 75px;
-    overflow: hidden;
-}
-.profile-images img{
-    object-fit:cover;
-    width: 50%;
-    height: 50%;
-}
 #fileupload{
     display: none;
 }
@@ -63,7 +46,8 @@ textarea{
 }
 textarea{
     margin-top: 3%;
-    margin-left: 3%;
+    margin-left: 5%;
+    margin-right: 10%;
 }
 #upload-img {
     width: 12vw;
@@ -71,22 +55,6 @@ textarea{
     object-fit: fill;
 }
 
-{#display: block;#}
-    {#position: absolute;#}
-    {#width: 50%;#}
-    {#height: 50%;#}
-    {#object-fit: contain;#}
-    {#transform: translate(-50%, -50%);#}
-  {#height: 85%;#}
-  {#width: 85%;#}
-  {#overflow: hidden;#}
-  {#border: solid 1px #000;#}
-  {#margin-left: 10px;#}
-  {#margin-top: 10px;#}
-  {#background-repeat: no-repeat;#}
-  {#background-position: center !important;#}
-  {#background-size: contain;#}
-{#}#}
 </style>
     <div class="row">
         <div class="col-md-6 col-sm-6 col-lg-6">
@@ -100,98 +68,117 @@ textarea{
     </div>
     <div class="row">
         <div class="col-md-6 col-sm-6 col-lg-6">
-            <p class="inside" id="author">By {{ author }}</p>
+            <p class="inside" id="author">Initial Author {{ author }}</p>
         </div>
     </div>
     <div class="card" >
-        <div class="row">
-            <div class="col-md-8 col-sm-8 col-lg-8">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-lg-12">
-                              <div>
-                                  {% for page in pages %}
-                                        {% if forloop.first %}
-                                  <textarea  readonly placeholder={{ page.content }} rows="25"></textarea>
-                                    {% endif %}
-                                {% endfor %}
-                              </div>
-                        </div>
-                    </div>
-            </div>
-            <div id ="image" class="col-md-3 col-sm-3 col-lg-3">
-                <div class="row">
-                    <div class="col-md-2 col-sm-2 col-lg-2">
-                                <div onclick="uploadFunction()" class="imgbox">
-                                    <img src="{% static "upload.png" %}" id="upload-img">
-                                </div>
-                            <div class="custom-file">
-                                <input  type="file" id="fileupload">
+        <form action="{% url 'writecloud:story' uuid %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row">
+                <div class="col-md-8 col-sm-8 col-lg-8">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-lg-12">
+                                  <div>
+{#                                      If only displaying#}
+{#                                      {% for page in pages %}#}
+{#                                            {% if forloop.first %}#}
+{#                                                <textarea  readonly placeholder='{{ page.content }}' rows="25"></textarea>#}
+{#                                        {% endif %}#}
+{#                                    {% endfor %}#}
+{#                                       If adding new content#}
+                                       <textarea placeholder='Continue your story here' name="content" rows="25"></textarea>
+                                  </div>
                             </div>
-                    </div>
+                        </div>
+                </div>
+            {% if include_images %}
+                <div id ="image" class="col-md-3 col-sm-3 col-lg-3">
+                        <div class="row">
+                            <div class="col-md-2 col-sm-2 col-lg-2">
+                                        <div onclick="uploadFunction()" class="imgbox">
+                                            <img src="{% static "upload.png" %}" id="upload-img">
+                                        </div>
+                                    <div class="custom-file">
+                                        <input  type="file" id="fileupload" name="image">
+                                    </div>
+                            </div>
+                        </div>
+                </div>
+            {% endif %}
+            </div>
+            <div class="row">
+{#                This is the case where we are displaying content#}
+{#                <div id="page">#}
+{#                    {% for page in pages %}#}
+{#                        {% if forloop.first %}#}
+{#                            <p>{{ page.number }}</p>#}
+{#                        {% endif %}#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#                Now the case where we want to add new content#}
+                <div id="page">
+                    {% for page in pages %}
+                        {% if forloop.last %}
+                            <p> {{ page.number|add:1 }} </p>
+                            <input hidden type="number" id="number" name="number" value="{{ page.number|add:1 }}">
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div id="page">
-                {% for page in pages %}
-                    {% if forloop.first %}
-                        <p>{{ page.number }}</p>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
+        <button type="submit">Upload</button>
+        </form>
     </div>
     {% for page in pages %}
         {{ page.content }} <br />
         <p><i>page {{ page.number }} by {{ page.author }}</i></p>
         <br />
     {% endfor %}
-{% endblock %}
 
-{% block footer_block %}
-    {% if user_authenticated %}
-        {% if user_review.present %}
-            <h2>Your review</h2>
-            {{ user_review.stars }} / 5 <br />
-            {{ user_review.body}} <br />
-        {% else %}
-            <h2>Review this Story</h2>
-            <form action="{% url 'writecloud:story' uuid %}" method="POST">
-                {% csrf_token %}
 
-                <b>Vote this Story:</b> <br />
-                {% for radio in form.stars %}
-                    {{ radio }}
-                {% endfor %}
-                <br />
+{#{% block footer_block %}#}
+{#    {% if user_authenticated %}#}
+{#        {% if user_review.present %}#}
+{#            <h2>Your review</h2>#}
+{#            {{ user_review.stars }} / 5 <br />#}
+{#            {{ user_review.body}} <br />#}
+{#        {% else %}#}
+{#            <h2>Review this Story</h2>#}
+{#            <form action="{% url 'writecloud:story' uuid %}" method="POST">#}
+{#                {% csrf_token %}#}
+{##}
+{#                <b>Vote this Story:</b> <br />#}
+{#                {% for radio in form.stars %}#}
+{#                    {{ radio }}#}
+{#                {% endfor %}#}
+{#                <br />#}
+{##}
+{#                <b>Leave your comments here:</b> <br />#}
+{#                {{ form.body }}#}
+{#                <br />#}
+{##}
+{#                <br />#}
+{##}
+{#                {% for hidden in form.hidden_fields %}#}
+{#                    {{ hidden }}#}
+{#                {% endfor %}#}
+{##}
+{#                <input type="submit" value="Submit review">#}
+{#            </form>#}
+{#        {% endif %}#}
+{#    {% else %}#}
+{#        <a href="{% url 'writecloud:login' %}">Log in</a> to review this Story#}
+{#    {% endif %}#}
 
-                <b>Leave your comments here:</b> <br />
-                {{ form.body }}
-                <br />
-
-                <br />
-
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
-
-                <input type="submit" value="Submit review">
-            </form>
-        {% endif %}
-    {% else %}
-        <a href="{% url 'writecloud:login' %}">Log in</a> to review this Story
-    {% endif %}
-
-    <h2>Reviews</h2>
-    <p><b>{{ stars }} / 5</b> stars out of a total of <b>{{ total }}</b> reviews</p>
-
-    {% for review in reviews %}
-        <i>{{ review.author }},</i> <b>{{ review.stars }} / 5:</b> <br />
-        {{ review.body }} <br />
-    {% endfor %}
+{#    <h2>Reviews</h2>#}
+{#    <p><b>{{ stars }} / 5</b> stars out of a total of <b>{{ total }}</b> reviews</p>#}
+{##}
+{#    {% for review in reviews %}#}
+{#        <i>{{ review.author }},</i> <b>{{ review.stars }} / 5:</b> <br />#}
+{#        {{ review.body }} <br />#}
+{#    {% endfor %}#}
 <script>
 function uploadFunction(){
     document.getElementById("fileupload").click();
 }
 </script>
+{#{% endblock %}#}
 {% endblock %}

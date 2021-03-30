@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 
 from .forms import *
 
+
 # Create your views here.
 
 
@@ -41,7 +42,6 @@ def sign_up(request):
 
 
 def user_login(request):
-
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -91,7 +91,6 @@ def create(request):
 
 
 def story(request, story_uuid):
-    
     # get the story for the requested UUID or redirect to a 404 page
     story = get_object_or_404(Story, pk=story_uuid)
 
@@ -99,7 +98,7 @@ def story(request, story_uuid):
     reviews = story.reviews.all()
     stars = reviews.aggregate(Avg('stars'))['stars__avg']
     total = reviews.aggregate(Count('stars'))['stars__count']
-    
+
     # initialise the context dictionary to pass to the template
     # "None" fields will be overwritten if meaningful
     context_dict = {
@@ -110,6 +109,8 @@ def story(request, story_uuid):
         'pages': [],
         # 'stars': f"{stars:.1f}",
         'total': total,
+        'include_images': story.include_images,
+        'template': story.template,
         'user_authenticated': None,
         'user_review': {
             'present': None,
@@ -118,7 +119,7 @@ def story(request, story_uuid):
         },
         'reviews': [],
     }
-    
+
     # unpack all pages of this story for display
     for page in pages:
         page_dict = {
@@ -131,16 +132,16 @@ def story(request, story_uuid):
     # if the user is logged in...
     user_authenticated = request.user.is_authenticated
     if user_authenticated:
-        
+
         context_dict.update({
             'user_authenticated': True,
         })
 
         # ...and has already rated this story:
-        if reviews.filter(author = request.user).exists():
-            
+        if reviews.filter(author=request.user).exists():
+
             # store their review separately from the others to display it first
-            user_review = reviews.get(author = request.user)
+            user_review = reviews.get(author=request.user)
             context_dict.update({
                 'user_review': {
                     'present': True,
@@ -148,34 +149,33 @@ def story(request, story_uuid):
                     'body': user_review.body,
                 }
             })
-            reviews = reviews.exclude(author = request.user)
-        
+            reviews = reviews.exclude(author=request.user)
+
         # ...but has not rated this story yet:
         else:
 
             # if the request is POST, validate and save the form
             if request.method == 'POST':
-                form = ReviewForm(request.POST)
+                # form = ReviewForm(request.POST)
+                number = request.POST.get('number')
+                image = request.FILES.get('image')
+                content = request.POST.get('content')
 
-                if form.is_valid():
-                    # overwrite default form bindings for security
-                    form = form.save(commit=False)
-                    form.author = request.user
-                    form.story = story
-                    form.save()
-                
+                Page.objects.create(number=number, content=content,
+                                    image=image,
+                                    story=story, author=request.user)
                 return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
 
             # if the request is GET, pass them the default bound form
-            else:
-                form = ReviewForm({
-                    'author': request.user,
-                    'story': story,
-                })
-
-                context_dict.update({
-                    'form': form,
-                })
+            # else:
+            # form = ReviewForm({
+            #     'author': request.user,
+            #     'story': story,
+            # })
+            #
+            # context_dict.update({
+            #     'form': form,
+            # })
 
     # if the user is not logged in:
     else:
@@ -201,7 +201,6 @@ def story(request, story_uuid):
 
 
 def top_stories(request):
-
     stories = Story.objects.all()
 
     context_dict = {
