@@ -33,6 +33,13 @@ textarea{
     background: #23d5d2;
     border: none !important;
 }
+.comment{
+    font-size : 1.5vw;
+    font-family: "Apple Symbols";
+    color: #23d5d2;
+    display: flex;
+    justify-content: center;
+}
 #page{
     display: flex !important;
     justify-content: center;
@@ -62,7 +69,7 @@ textarea{
     width: 150px;
     height: 150px;
 }
-#author-profile{
+#author-heading{
     width: 100%;
 }
 </style>
@@ -70,25 +77,208 @@ textarea{
 {% csrf_token %}
 
 {% block head_block %}
+<!-- Page Title and profile photo -->
 <section>
-    <div class="author-profile">
-        <h2 class="inside" id="author"> {{ author }}'s Profile</h2>
-        <class profile-images>
-        /* Insert profile images */
-        </class>
+    <div class="row d-flex justify-content profile-heading p-5 text-center bg-light">
+        <h2 class="mb-3"> {{ author }}'s Profile</h2>
+        <br>
+    </class>
     </div>
-    <div class="row">
-        
-        <div col-sm-6>
-        <img src>
+{% endblock %}
+
+<!-- Profile Photo -->
+        <img src = "../static/default_profilepic.png" alt="default_profilepic" width = 300 hieght = 300>
+    </div>
+    <br>
+
+<!-- Stories contributed to -->
+        <div class ="stories-list ">
+            <div class="row d-flex justify-content-center text-center" id="rankings">
+                <li><a class="inside">{{ author }}'s Stories </a></li>
         </div>
-    
-        <div col-sm-6>
-        <table>
-            <tr>
-                <td>
-                    {% for story in stories %}
-                    <h2><a href="{% url 'writecloud:story' story.uuid %}">{{ story.title }}</a></h2>
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-lg-1">
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3">
+            <li><a href="#" class="inside">1. Longest Story</a></li>
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-3 col-sm-3 col-lg-3">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
+                <li><a class="comment" href="#">300 Comments</a></li>
+            </div>
+            <div class="col-md-1 col-sm-1 col-lg-1">
+            </div>
+        </div>
+         <div class="row">
+            <div class="col-md-1 col-sm-1 col-lg-1">
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3">
+            <li><a href="#" class="inside">2. Second longest story</a></li>
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-3 col-sm-3 col-lg-3">
+                    <br/>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
+                <li><a class="comment" href="#">300 Comments</a></li>
+            </div>
+            <div class="col-md-1 col-sm-1 col-lg-1">
+            </div>
+        </div>
+         <div class="row">
+            <div class="col-md-1 col-sm-1 col-lg-1">
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3">
+            <li><a href="#" class="inside">3. Third longest story</a></li>
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-3 col-sm-3 col-lg-3">
+                    <br/>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
+                <li><a class="comment" href="#">300 Comments</a></li>
+            </div>
+            <div class="col-md-1 col-sm-1 col-lg-1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-lg-1">
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3">
+            <li><a href="#" class="inside">4. Fourth longest story</a></li>
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-3 col-sm-3 col-lg-3">
+                    <br/>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
+                <li><a class="comment" href="#">300 Comments</a></li>
+            </div>
+            <div class="col-md-1 col-sm-1 col-lg-1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-lg-1">
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3">
+            <li><a href="#" class="inside">5. Fifth longest story</a></li>
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star"></span>
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    <br/>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                </div>
+                <div class="col-md-3 col-sm-3 col-lg-3">
+                    <br/>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
+                <li><a class="comment" href="#">300 Comments</a></li>
+            </div>
+            <div class="col-md-1 col-sm-1 col-lg-1">
+            </div>
+            </div>
+        </class>
+
+
+
+
+
+
+
+
+
+<!-- 
+        {% for story in stories %}
+        <h2><a href="{% url 'writecloud:story' story.uuid %}">{{ story.title }}</a></h2>
                     {% endfor %}
                 </td>
             </tr>
@@ -99,19 +289,15 @@ textarea{
                     <p><b>{{ story.stars }} / 5 out of {{ story.total }} ratings</p>
                     {% endfor %}
                 </td>
-            </tr>
-            
-        </table>
-        </div>
-        
-    </div>
+            </tr> -->
+
 </class>
 </class>
 </section>
  
 </body>
 {% endblock %}
-{% endblock %}
+
 
 
      
