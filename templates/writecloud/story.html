@@ -56,13 +56,14 @@ textarea{
     object-fit: fill;
 }
 
-a {
+button {
   text-decoration: none;
   display: inline-block;
   padding: 8px 16px;
+    border: none !important;
 }
 
-a:hover {
+button:hover {
   background-color: #ddd;
   color: black;
 }
@@ -101,7 +102,6 @@ a:hover {
         </div>
     </div>
     {% if counter < pages|length %}
-        {{ counter }}
         <div class="card" >
             <div class="row">
                 <div class="col-md-8 col-sm-8 col-lg-8">
