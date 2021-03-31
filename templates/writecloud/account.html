@@ -1,43 +1,120 @@
-{% extends "writecloud/base.html" %}
-
-<!DOCTYPE html>
-{% load static %}
+{% extends 'writecloud/base.html' %}
 {% block header_logged_in %}
 {% endblock %}
 {% block header_logo %}
 {% endblock %}
+{% load static %}
+
 {% block body_block %}
 <style>
+.inside{
+    font-size : 2vw;
+    font-family: "Apple Symbols";
+    color: #ee7752;
+    margin-left: 5%;
+}
+#sub{
+    font-size : 1.2vw !important;
+    margin-bottom: 2%;
+}
+#author{
+    font-size : 1.5vw !important;
+    margin-bottom: 5%;
+    color: #23d5d2 !important;
+}
+.card{
+    margin-left:25%;
+    margin-right:25%;
+    background: #23d5d2;
+    border-radius: 15px;
+}
+textarea{
+    width: 100%;
+    background: #23d5d2;
+    border: none !important;
+}
+#page{
+    display: flex !important;
+    justify-content: center;
+}
+
+.profile-images-card{
+    margin: auto;
+    display: table;
+    background: #fff;
+    padding: 30px 50px;
+}
+
+.profile-images{
+    width: 50px;
+    height: 75px;
+    overflow: hidden;
+}
+.profile-images img{
+    object-fit:cover;
+    width: 50%;
+    height: 50%;
+}
+#image{
+    margin-top: 3%;
+}
 #profile-container img {
     width: 150px;
     height: 150px;
+}
+#author-profile{
+    width: 100%;
 }
 </style>
 
 {% csrf_token %}
 
-<h4>*/Insert Username*/'s Profile </h4></th>    
-  
-<table style:"width:100%">
-
-    <th>      
-    <form id="update_user_form" method="POST" action=""enctype="multipart/form-data">{% csrf_token %}
-    <div id="id_image_container" style="float:left; margin-left: 4%; margin-top:2%">
-    <input type="image" class="img-responsive" src="{{ user.userprofile.image.url }}" width="150">
-    <input type="image"  name="myfile" style="display: none;" /></form>
+{% block head_block %}
+<section>
+    <div class="author-profile">
+        <h2 class="inside" id="author"> {{ author }}'s Profile</h2>
+        <class profile-images>
+        /* Insert profile images */
+        </class>
     </div>
-    </th>
-    <th> Stories created by user</th>
-    <th> Stories contributed to by user</th>
-    <tr>
-        <td></td>
-        <td><li> /*List of stories created</li></td>
-        <td><li>/*List of stories contributed to*/</li></td>
-    </tr>
+    <div class="row">
+        
+        <div col-sm-6>
+        <img src>
+        </div>
+    
+        <div col-sm-6>
+        <table>
+            <tr>
+                <td>
+                    {% for story in stories %}
+                    <h2><a href="{% url 'writecloud:story' story.uuid %}">{{ story.title }}</a></h2>
+                    {% endfor %}
+                </td>
+            </tr>
 
-</table>
-     
+            <tr>
+                <td>
+                    {% for story in stories %}
+                    <p><b>{{ story.stars }} / 5 out of {{ story.total }} ratings</p>
+                    {% endfor %}
+                </td>
+            </tr>
+            
+        </table>
+        </div>
+        
+    </div>
+</class>
+</class>
+</section>
+ 
 </body>
-
 {% endblock %}
+{% endblock %}
+
+
+     
+
+
 
