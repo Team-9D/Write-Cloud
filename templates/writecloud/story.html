@@ -4,6 +4,7 @@
 {% block header_logo %}
 {% endblock %}
 {% load static %}
+{% load my_custom_tags %}
 
 {% block body_block %}
 <style>
@@ -55,6 +56,34 @@ textarea{
     object-fit: fill;
 }
 
+a {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+}
+
+a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.previous {
+  background-color: #23d5d2;
+  color: white;
+}
+
+.next {
+  background-color: #ee7752;;
+  color: white;
+}
+
+
+#arrows{
+    display: flex;
+    justify-content: center;
+}
+
+
 </style>
     <div class="row">
         <div class="col-md-6 col-sm-6 col-lg-6">
@@ -71,6 +100,43 @@ textarea{
             <p class="inside" id="author">Initial Author {{ author }}</p>
         </div>
     </div>
+    {% if counter < pages|length %}
+        <div class="card" >
+            <div class="row">
+                <div class="col-md-8 col-sm-8 col-lg-8">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-lg-12">
+                                  <div>
+{#                                      If only displaying#}
+                                        <textarea  readonly placeholder='{{  pages|return_content:counter}}' rows="25"></textarea>
+                                  </div>
+                            </div>
+                        </div>
+                </div>
+            {% if include_images %}
+                <div id ="image" class="col-md-3 col-sm-3 col-lg-3">
+                        <div class="row">
+                            <div class="col-md-2 col-sm-2 col-lg-2">
+                                        <div onclick="uploadFunction()" class="imgbox">
+                                            <img src="{% static "upload.png" %}" id="upload-img">
+                                        </div>
+                                    <div class="custom-file">
+                                        <input  type="file" id="fileupload" name="image">
+                                    </div>
+                            </div>
+                        </div>
+                </div>
+            {% endif %}
+            </div>
+            <div class="row">
+{#                This is the case where we are displaying content#}
+                <div id="page">
+                        <p>{{ pages|return_number:counter }}</p>
+                </div>
+            </div>
+    </div>
+    {% endif %}
+    {% if counter == pages|length %}
     <div class="card" >
         <form action="{% url 'writecloud:story' uuid %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="row">
@@ -78,12 +144,6 @@ textarea{
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-lg-12">
                                   <div>
-{#                                      If only displaying#}
-{#                                      {% for page in pages %}#}
-{#                                            {% if forloop.first %}#}
-{#                                                <textarea  readonly placeholder='{{ page.content }}' rows="25"></textarea>#}
-{#                                        {% endif %}#}
-{#                                    {% endfor %}#}
 {#                                       If adding new content#}
                                        <textarea placeholder='Continue your story here' name="content" rows="25"></textarea>
                                   </div>
@@ -106,19 +166,11 @@ textarea{
             {% endif %}
             </div>
             <div class="row">
-{#                This is the case where we are displaying content#}
-{#                <div id="page">#}
-{#                    {% for page in pages %}#}
-{#                        {% if forloop.first %}#}
-{#                            <p>{{ page.number }}</p>#}
-{#                        {% endif %}#}
-{#                    {% endfor %}#}
-{#                </div>#}
 {#                Now the case where we want to add new content#}
                 <div id="page">
                     {% for page in pages %}
                         {% if forloop.last %}
-                            <p> {{ page.number|add:1 }} </p>
+                            <p> {{ pages.number|add:1 }} </p>
                             <input hidden type="number" id="number" name="number" value="{{ page.number|add:1 }}">
                         {% endif %}
                     {% endfor %}
@@ -126,9 +178,18 @@ textarea{
             </div>
         <button type="submit">Upload</button>
         </form>
+    {% endif %}
+    </div>
+    <div class="row" id="arrows">
+        {% if counter > 0 %}
+            <a onclick="leftClick()" id="left-arrow" class="previous">&laquo; Previous</a>
+        {% endif %}
+        {% if counter < pages|length %}
+            <a onclick="rightClick()" class="next">Next &raquo;</a>
+        {% endif %}
     </div>
     {% for page in pages %}
-        {{ page.content }} <br />
+        {{ pages|length }} <br />
         <p><i>page {{ page.number }} by {{ page.author }}</i></p>
         <br />
     {% endfor %}
@@ -175,9 +236,19 @@ textarea{
 {#        <i>{{ review.author }},</i> <b>{{ review.stars }} / 5:</b> <br />#}
 {#        {{ review.body }} <br />#}
 {#    {% endfor %}#}
+
 <script>
+let counter = 0;
 function uploadFunction(){
     document.getElementById("fileupload").click();
+}
+function leftClick(){
+    {% decrement counter %}
+}
+function rightClick(){
+    {% increment counter %}
+    counter++;
+
 }
 </script>
 {#{% endblock %}#}

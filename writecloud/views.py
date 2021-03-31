@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Count, Avg
 
+
 from writecloud.models import Story
 from django.contrib.auth.models import User
 
@@ -90,7 +91,9 @@ def create(request):
     return render(request, 'writecloud/createStory.html')
 
 
+
 def story(request, story_uuid):
+
     # get the story for the requested UUID or redirect to a 404 page
     story = get_object_or_404(Story, pk=story_uuid)
 
@@ -107,6 +110,7 @@ def story(request, story_uuid):
         'subtitle': story.subtitle,
         'author': story.author,
         'pages': [],
+        'counter': 1,
         # 'stars': f"{stars:.1f}",
         'total': total,
         'include_images': story.include_images,
