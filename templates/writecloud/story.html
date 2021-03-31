@@ -124,9 +124,6 @@ button:hover {
                                         <div onclick="uploadFunction()" class="imgbox">
                                             <img src="{{ pages|return_image:counter }}" id="upload-img">
                                         </div>
-                                    <div class="custom-file">
-                                        <input  type="file" id="fileupload" name="image">
-                                    </div>
                             </div>
                         </div>
                 </div>
@@ -149,7 +146,7 @@ button:hover {
                             <div class="col-md-12 col-sm-12 col-lg-12">
                                   <div>
 {#                                       If adding new content#}
-                                       <textarea placeholder='Continue your story here' name="content" rows="25"></textarea>
+                                       <textarea placeholder='Continue your story here' id="content" name="content" rows="25"></textarea>
                                   </div>
                             </div>
                         </div>
@@ -180,7 +177,7 @@ button:hover {
                     {% endfor %}
                 </div>
             </div>
-        <button id="upload" type="submit">Upload</button>
+        <button id="upload" type="submit" hidden>Upload</button>
         </form>
     {% endif %}
     </div>
@@ -249,29 +246,22 @@ button:hover {
 function uploadFunction(){
     document.getElementById("fileupload").click();
 }
-{#function leftClick(){#}
-{#    {% decrement counter %}#}
-{#function rightClick(){#}
-{#   {% increment counter %}#}
-{#$("#rightClick").click(function(){#}
-{#    {% increment counter %}#}
-{##}
-{#        $.ajax(#}
-{#            {#}
-{#                type:"POST",#}
-{#                url: "{% url 'writecloud:story' uuid %}",#}
-{#                data: {"csrfmiddlewaretoken" : "{{csrf_token}}"},#}
-{#                success: function( respData )#}
-{#                {#}
-{#                    alert(respData);#}
-{#                },#}
-{#                error: function (jqXHR, status, err) {#}
-{#                    alert(err +  " " + status);#}
-{#                    return "error";#}
-{#                  }#}
-{#            });#}
-{#    location.reload();#}
-{#})#}
+
+jQuery("#content, #fileupload").on("input", function () {
+    const isValid = validate();
+    if (isValid) {
+      jQuery("#upload").removeAttr("hidden");
+    }
+});
+
+function validate() {
+  let isValid = true;
+  $('input, textarea').each(function() {
+    if ($(this).val() === '')
+        isValid = false;
+  });
+  return isValid;
+}
 </script>
 {#{% endblock %}#}
 {% endblock %}
