@@ -11,7 +11,7 @@
 .inside{
     font-size : 2vw;
     font-family: "Apple Symbols";
-    color: #ee7752;
+    color: #ee7752 ;
     margin-left: 5%;
 }
 #sub{
@@ -26,14 +26,50 @@
 .card{
     margin-left:25%;
     margin-right:25%;
+    {% if template == 1 %}
+    box-shadow: 0 0 5px #23d5d2;
+    {% endif %}
+    {% if template == 2 %}
+    box-shadow: 0 0 5px #ee7752;
+    {% endif %}
+    {% if template == 3 %}
+    box-shadow: 0 0 5px #23d5d2;
     background: #23d5d2;
+    {% endif %}
+    {% if template == 4 %}
+    box-shadow: 0 0 5px #ee7752;
+    background: #ee7752;
+    {% endif %}
     border-radius: 15px;
 }
 textarea{
     width: 100%;
+    {% if template == 1 %}
+    color: #ee7752;
+    {% endif %}
+    {% if template == 2 %}
+    color: #23d5d2;
+    {% endif %}
+    {% if template == 3 %}
+    color: #ee7752;
     background: #23d5d2;
+    {% endif %}
+    {% if template == 4 %}
+    color: #23d5d2;
+    background: #ee7752;
+    {% endif %}
     border: none !important;
 }
+
+::placeholder{
+    {% if template == 1 or  template == 3%}
+    color: #ee7752;
+    {% endif %}
+    {% if template == 2 or  template == 4%}
+    color: #23d5d2;
+    {% endif %}
+}
+
 #page{
     display: flex !important;
     justify-content: center;
@@ -50,10 +86,20 @@ textarea{
     margin-left: 5%;
     margin-right: 10%;
 }
+
 #upload-img {
     width: 12vw;
     height: 14vw;
     object-fit: fill;
+}
+
+#page{
+    {% if template == 1 or  template == 3%}
+    color: #ee7752;
+    {% endif %}
+    {% if template == 2 or  template == 4%}
+    color: #23d5d2;
+    {% endif %}
 }
 
 button {
@@ -77,6 +123,7 @@ button:hover {
   background-color: #ee7752;;
   color: white;
 }
+
 
 
 #arrows{
@@ -156,7 +203,12 @@ button:hover {
                         <div class="row">
                             <div class="col-md-2 col-sm-2 col-lg-2">
                                         <div onclick="uploadFunction()" class="imgbox">
+                                            {% if template ==  1 or template ==  3%}
                                             <img src="{% static "upload.png" %}" id="upload-img">
+                                            {% endif %}
+                                            {% if template ==  2 or template ==  4%}
+                                            <img src="{% static "upload1.png" %}" id="upload-img">
+                                            {% endif %}
                                         </div>
                                     <div class="custom-file">
                                         <input  type="file" id="fileupload" name="image">
@@ -169,6 +221,10 @@ button:hover {
             <div class="row">
 {#                Now the case where we want to add new content#}
                 <div id="page">
+                    {% if page|length == 0 %}
+                        <p> 1 </p>
+                        <input hidden type="number" id="number" name="number" value="1">
+                    {% endif %}
                     {% for page in pages %}
                         {% if forloop.last %}
                             <p> {{ pages.number|add:1 }} </p>
@@ -193,54 +249,54 @@ button:hover {
         </form>
     {% endif %}
     </div>
-    {% for page in pages %}
-        {{ pages|length }} <br />
-        <p><i>page {{ page.number }} by {{ page.author }}</i></p>
-        <br />
+
+{#display comments if story complete#}
+
+{% block footer_block %}
+    {% if page|length == total_pages %}
+    {% if user_authenticated %}
+        {% if user_review.present %}
+            <h2>Your review</h2>
+            {{ user_review.stars }} / 5 <br />
+            {{ user_review.body}} <br />
+        {% else %}
+            <h2>Review this Story</h2>
+            <form action="{% url 'writecloud:story' uuid %}" method="POST">
+                {% csrf_token %}
+
+                <b>Vote this Story:</b> <br />
+                {% for radio in form.stars %}
+                    {{ radio }}
+                {% endfor %}
+                <br />
+
+                <b>Leave your comments here:</b> <br />
+                {{ form.body }}
+                <br />
+
+                <br />
+
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                <input type="submit" value="Submit review">
+            </form>
+        {% endif %}
+    {% else %}
+        <a href="{% url 'writecloud:login' %}">Log in</a> to review this Story
+    {% endif %}
+
+    <h2>Reviews</h2>
+    <p><b>{{ stars }} / 5</b> stars out of a total of <b>{{ total }}</b> reviews</p>
+
+    {% for review in reviews %}
+        <i>{{ review.author }},</i> <b>{{ review.stars }} / 5:</b> <br />
+        {{ review.body }} <br />
     {% endfor %}
+    {% endif %}
+{% endblock %}
 
-
-{#{% block footer_block %}#}
-{#    {% if user_authenticated %}#}
-{#        {% if user_review.present %}#}
-{#            <h2>Your review</h2>#}
-{#            {{ user_review.stars }} / 5 <br />#}
-{#            {{ user_review.body}} <br />#}
-{#        {% else %}#}
-{#            <h2>Review this Story</h2>#}
-{#            <form action="{% url 'writecloud:story' uuid %}" method="POST">#}
-{#                {% csrf_token %}#}
-{##}
-{#                <b>Vote this Story:</b> <br />#}
-{#                {% for radio in form.stars %}#}
-{#                    {{ radio }}#}
-{#                {% endfor %}#}
-{#                <br />#}
-{##}
-{#                <b>Leave your comments here:</b> <br />#}
-{#                {{ form.body }}#}
-{#                <br />#}
-{##}
-{#                <br />#}
-{##}
-{#                {% for hidden in form.hidden_fields %}#}
-{#                    {{ hidden }}#}
-{#                {% endfor %}#}
-{##}
-{#                <input type="submit" value="Submit review">#}
-{#            </form>#}
-{#        {% endif %}#}
-{#    {% else %}#}
-{#        <a href="{% url 'writecloud:login' %}">Log in</a> to review this Story#}
-{#    {% endif %}#}
-
-{#    <h2>Reviews</h2>#}
-{#    <p><b>{{ stars }} / 5</b> stars out of a total of <b>{{ total }}</b> reviews</p>#}
-{##}
-{#    {% for review in reviews %}#}
-{#        <i>{{ review.author }},</i> <b>{{ review.stars }} / 5:</b> <br />#}
-{#        {{ review.body }} <br />#}
-{#    {% endfor %}#}
 
 <script>
 function uploadFunction(){
@@ -263,5 +319,5 @@ function validate() {
   return isValid;
 }
 </script>
-{#{% endblock %}#}
+
 {% endblock %}

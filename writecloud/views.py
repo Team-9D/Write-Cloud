@@ -109,6 +109,7 @@ def story(request, story_uuid):
         'title': story.title,
         'subtitle': story.subtitle,
         'author': story.author,
+        'total_pages': story.length,
         'pages': [],
         'counter': story.counter,
         # 'stars': f"{stars:.1f}",
