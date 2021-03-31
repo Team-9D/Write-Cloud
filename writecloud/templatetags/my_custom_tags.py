@@ -56,3 +56,8 @@ def return_number(pages, counter):
 @register.filter
 def return_content(pages, counter):
     return pages[counter]['content']
+
+
+@register.filter
+def return_image(pages, counter):
+    return pages[counter]['image'].url

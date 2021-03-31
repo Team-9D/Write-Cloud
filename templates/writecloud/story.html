@@ -64,8 +64,8 @@ button {
 }
 
 button:hover {
-  background-color: #ddd;
-  color: black;
+  background-color: #ddd !important;
+  color: black !important;
 }
 
 .previous {
@@ -84,7 +84,10 @@ button:hover {
     justify-content: center;
 }
 
-
+#upload {
+  background-color: #ee7752;;
+  color: white;
+}
 </style>
     <div class="row">
         <div class="col-md-6 col-sm-6 col-lg-6">
@@ -119,7 +122,7 @@ button:hover {
                         <div class="row">
                             <div class="col-md-2 col-sm-2 col-lg-2">
                                         <div onclick="uploadFunction()" class="imgbox">
-                                            <img src="{% static "upload.png" %}" id="upload-img">
+                                            <img src="{{ pages|return_image:counter }}" id="upload-img">
                                         </div>
                                     <div class="custom-file">
                                         <input  type="file" id="fileupload" name="image">
@@ -177,7 +180,7 @@ button:hover {
                     {% endfor %}
                 </div>
             </div>
-        <button type="submit">Upload</button>
+        <button id="upload" type="submit">Upload</button>
         </form>
     {% endif %}
     </div>

@@ -130,6 +130,7 @@ def story(request, story_uuid):
             'number': page.number,
             'author': page.author,
             'content': page.content,
+            'image': page.image,
         }
         context_dict['pages'].append(page_dict)
 
