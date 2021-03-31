@@ -28,6 +28,7 @@ class Story(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     title = models.CharField(max_length=30)
+    counter = models.IntegerField(default=0)
     subtitle = models.CharField(max_length=60, default="")
     length = models.PositiveSmallIntegerField()
     template = models.IntegerField(

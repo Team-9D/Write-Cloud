@@ -101,6 +101,7 @@ a:hover {
         </div>
     </div>
     {% if counter < pages|length %}
+        {{ counter }}
         <div class="card" >
             <div class="row">
                 <div class="col-md-8 col-sm-8 col-lg-8">
@@ -182,11 +183,15 @@ a:hover {
     </div>
     <div class="row" id="arrows">
         {% if counter > 0 %}
-            <a onclick="leftClick()" id="left-arrow" class="previous">&laquo; Previous</a>
+        <form id="leftClick_form" method="post" action="{% url 'writecloud:story' uuid %}">{% csrf_token %}
+            <button id="leftClick" name="leftClick" value="{{ counter }}" class="previous">&laquo; Previous</button>
+        </form>
         {% endif %}
-        {% if counter < pages|length %}
-            <a onclick="rightClick()" class="next">Next &raquo;</a>
-        {% endif %}
+    {% if counter < pages|length %}
+        <form id="rightClick_form" method="post" action="{% url 'writecloud:story' uuid %}">{% csrf_token %}
+            <button id="rightClick" name="rightClick" value="{{ counter }}" class="next">Next &raquo;</button>
+        </form>
+    {% endif %}
     </div>
     {% for page in pages %}
         {{ pages|length }} <br />
@@ -238,18 +243,32 @@ a:hover {
 {#    {% endfor %}#}
 
 <script>
-let counter = 0;
 function uploadFunction(){
     document.getElementById("fileupload").click();
 }
-function leftClick(){
-    {% decrement counter %}
-}
-function rightClick(){
-    {% increment counter %}
-    counter++;
-
-}
+{#function leftClick(){#}
+{#    {% decrement counter %}#}
+{#function rightClick(){#}
+{#   {% increment counter %}#}
+{#$("#rightClick").click(function(){#}
+{#    {% increment counter %}#}
+{##}
+{#        $.ajax(#}
+{#            {#}
+{#                type:"POST",#}
+{#                url: "{% url 'writecloud:story' uuid %}",#}
+{#                data: {"csrfmiddlewaretoken" : "{{csrf_token}}"},#}
+{#                success: function( respData )#}
+{#                {#}
+{#                    alert(respData);#}
+{#                },#}
+{#                error: function (jqXHR, status, err) {#}
+{#                    alert(err +  " " + status);#}
+{#                    return "error";#}
+{#                  }#}
+{#            });#}
+{#    location.reload();#}
+{#})#}
 </script>
 {#{% endblock %}#}
 {% endblock %}

@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Count, Avg
-
+from django.db.models import F
+from django.views.decorators.csrf import csrf_exempt
 
 from writecloud.models import Story
 from django.contrib.auth.models import User
@@ -91,7 +92,6 @@ def create(request):
     return render(request, 'writecloud/createStory.html')
 
 
-
 def story(request, story_uuid):
 
     # get the story for the requested UUID or redirect to a 404 page
@@ -110,7 +110,7 @@ def story(request, story_uuid):
         'subtitle': story.subtitle,
         'author': story.author,
         'pages': [],
-        'counter': 1,
+        'counter': story.counter,
         # 'stars': f"{stars:.1f}",
         'total': total,
         'include_images': story.include_images,
@@ -161,14 +161,30 @@ def story(request, story_uuid):
             # if the request is POST, validate and save the form
             if request.method == 'POST':
                 # form = ReviewForm(request.POST)
-                number = request.POST.get('number')
-                image = request.FILES.get('image')
-                content = request.POST.get('content')
+                if 'rightClick' in request.POST:
+                    story.counter = F('counter') + 1
+                    story.save(update_fields=["counter"])
+                    context_dict.update({
+                        'counter': story.counter,
+                    })
+                    return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
+                if 'leftClick' in request.POST:
+                    story.counter = F('counter') - 1
+                    story.save(update_fields=["counter"])
+                    context_dict.update({
+                        'counter': story.counter,
+                    })
+                    return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
+                else:
+                    number = request.POST.get('number')
+                    image = request.FILES.get('image')
+                    content = request.POST.get('content')
 
-                Page.objects.create(number=number, content=content,
-                                    image=image,
-                                    story=story, author=request.user)
-                return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
+                    Page.objects.create(number=number, content=content,
+                                        image=image,
+                                        story=story, author=request.user)
+                    return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
+
 
             # if the request is GET, pass them the default bound form
             # else:
