@@ -14,6 +14,24 @@
     color: #ee7752 ;
     margin-left: 5%;
 }
+#vote{
+    font-size : 1.5vw;
+    font-family: "Apple Symbols";
+    color: #ee7752 ;
+    margin-left: 5%;
+}
+#vote_content{
+    font-size : 1.5vw;
+    font-family: "Apple Symbols";
+    color: #ee7752 ;
+    margin-left: 6%;
+}
+#vote_author{
+    font-size : 1.5vw;
+    font-family: "Apple Symbols";
+    color: #23d5d2 ;
+    margin-left: 6%;
+}
 #sub{
     font-size : 1.2vw !important;
     margin-bottom: 2%;
@@ -106,7 +124,7 @@ button {
   text-decoration: none;
   display: inline-block;
   padding: 8px 16px;
-    border: none !important;
+  border: none !important;
 }
 
 button:hover {
@@ -137,6 +155,11 @@ button:hover {
     background-color: #23d5d2;
 {% endif %}
   color: white;
+}
+#comment{
+    margin-left: 2%;
+    margin-right: 25%;
+    border-radius: 15px;
 }
 </style>
     <div class="row">
@@ -246,55 +269,6 @@ button:hover {
     </form>
     {% endif %}
     </div>
-
-{#display comments if story complete#}
-
-{% block footer_block %}
-    {% if pages|length == total_pages %}
-    {% if user_authenticated %}
-        {% if user_review.present %}
-            <h2>Your review</h2>
-            {{ user_review.stars }} / 5 <br />
-            {{ user_review.body}} <br />
-        {% else %}
-            <h2>Review this Story</h2>
-            <form action="{% url 'writecloud:story' uuid %}" method="POST">
-                {% csrf_token %}
-
-                <b>Vote this Story:</b> <br />
-                {% for radio in form.stars %}
-                    {{ radio }}
-                {% endfor %}
-                <br />
-
-                <b>Leave your comments here:</b> <br />
-                {{ form.body }}
-                <br />
-
-                <br />
-
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
-
-                <input type="submit" value="Submit review">
-            </form>
-        {% endif %}
-    {% else %}
-        <a href="{% url 'writecloud:login' %}">Log in</a> to review this Story
-    {% endif %}
-
-    <h2>Reviews</h2>
-    <p><b>{{ stars }} / 5</b> stars out of a total of <b>{{ total }}</b> reviews</p>
-
-    {% for review in reviews %}
-        <i>{{ review.author }},</i> <b>{{ review.stars }} / 5:</b> <br />
-        {{ review.body }} <br />
-    {% endfor %}
-    {% endif %}
-{% endblock %}
-
-
 <script>
 function uploadFunction(){
     document.getElementById("fileupload").click();
@@ -317,4 +291,56 @@ function validate() {
 }
 </script>
 
+{% endblock %}
+
+{#display comments if story complete#}
+
+{% block footer_block %}
+    {% if pages|length == total_pages %}
+        {% if user_review.present %}
+            <h2 class="inside">Your review</h2>
+            {{ user_review.stars }} / 5 <br />
+            {{ user_review.body}} <br />
+        {% else %}
+            <h2 class="inside">Review this Story</h2>
+            <form action="{% url 'writecloud:story' uuid %}" method="POST">
+                {% csrf_token %}
+
+                <b id="vote">Give a rating:</b> <br />
+                <div class="row">
+                {% for radio in form.stars %}
+                    {{ radio }}
+                {% endfor %}
+                </div>
+
+
+                <b id="vote">Leave your comments here:</b>
+                <div id="comment">
+                    {{ form.body }}
+                </div>
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                <button id="voteForm" name="voteForm" >Submit review</button>
+            </form>
+        {% endif %}
+
+    <h2 class="inside">Reviews</h2>
+    <p id="vote"><b>{{ stars }} / 5</b> stars out of a total of <b>{{ total }}</b> reviews</p>
+
+    {% for review in reviews %}
+        <div class="row">
+            <i id="vote_author">{{ review.author }}</i>
+        </div>
+        <div class="row">
+            <i id="vote_content">{{ review.stars }}</i>
+        </div>
+        <div class="row">
+            <i id="vote_content">{{ review.body }}</i>
+        </div>
+        <div class="row">
+        </div>
+    {% endfor %}
+    {% endif %}
 {% endblock %}

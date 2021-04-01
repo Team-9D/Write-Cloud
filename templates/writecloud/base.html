@@ -69,7 +69,7 @@ li {
                     <li><img class="resize-header" src="{% static "Logo.png" %}"/></li>
                     <li ><a class="limit" href="{% url 'writecloud:index' %}">Home</a></li>
                     <li><a class="limit" href="{% url 'writecloud:create_story' %}">Start Story</a></li>
-                    <li><a class="limit" href="#">Continue Story</a></li>
+                    <li><a class="limit" href="{% url 'writecloud:top_stories' %}">Continue Story</a></li>
                     <li><a class="limit" href="{% url 'writecloud:top_stories' %}">Top Stories</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
