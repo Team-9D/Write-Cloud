@@ -45,7 +45,7 @@ input{
     font-family: "Apple Symbols";
 }
 
-#in{
+#in, #in1, #in2, #in3{
     box-shadow: 0 0 5px #ee7752;
     background-color: #f7ddd4;
     font-size : 1.2vw;
@@ -136,16 +136,16 @@ textarea[id^="input4"]{
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
-                        <input type="text" id="in" name="title" class="form-control" placeholder="Enter Title" />
+                        <input type="text" id="in1" name="title" class="form-control" placeholder="Enter Title" />
                     </div>
                     <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
-                        <input type="text" id="in"  name="subtitle" class="form-control" placeholder="Enter Subtitle"/>
+                        <input type="text" id="in2"  name="subtitle" class="form-control" placeholder="Enter Subtitle"/>
                     </div>
                     <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
-                        <input type="text" id="in"  name="length" class="form-control" placeholder="Enter Number of Pages"/>
+                        <input type="text" id="in3"  name="length" class="form-control" placeholder="Enter Number of Pages"/>
                     </div>
                     <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
-                        <input readonly onclick="imagesFunction()" type="text" id="in"  name="include_images" class="form-control" placeholder="No Images included"/>
+                        <input readonly onclick="imagesFunction()" type="text" id="in" value="Click to include images"  name="include_images" class="form-control" placeholder="No Images included"/>
                     </div>
                 </div>
                 <div class="row" id="templates">
@@ -196,8 +196,8 @@ textarea[id^="input4"]{
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                    <button type="submit" id="in" class="btn btn-primary pull-right"><a id="credentials">Create Story</a></button>
+                <div hidden id="upload" class="row">
+                    <button type="submit" id="in"  class="btn btn-primary pull-right"><a id="credentials">Create Story</a></button>
                 </div>
             </div>
         </form>
@@ -240,6 +240,21 @@ function imagesFunction(){
     } else{
         $('input[name="include_images"]').val('');
     }
+}
+jQuery("#in1, #in2, #in3").on("input", function () {
+    const isValid = validate();
+    if (isValid) {
+      jQuery("#upload").removeAttr("hidden");
+    }
+});
+
+function validate() {
+  let isValid = true;
+  $('input').each(function() {
+    if ($(this).val() === '')
+        isValid = false;
+  });
+  return isValid;
 }
 </script>
 

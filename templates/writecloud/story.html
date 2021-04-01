@@ -132,7 +132,12 @@ button:hover {
 }
 
 #upload {
-  background-color: #ee7752;;
+{% if template ==  1 or template ==  3%}
+  background-color: #23d5d2;
+{% endif %}
+{% if template ==  2 or template ==  4%}
+  background-color: #ee7752;
+{% endif %}
   color: white;
 }
 </style>
