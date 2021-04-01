@@ -253,6 +253,8 @@ function validate() {
   $('input').each(function() {
     if ($(this).val() === '')
         isValid = false;
+    if ($(this).attr("id") === 'in3' && !$.isNumeric($(this).val()))
+        isValid = false;
   });
   return isValid;
 }

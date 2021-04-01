@@ -189,15 +189,15 @@ def story(request, story_uuid):
 
 
             # if the request is GET, pass them the default bound form
-            # else:
-            # form = ReviewForm({
-            #     'author': request.user,
-            #     'story': story,
-            # })
-            #
-            # context_dict.update({
-            #     'form': form,
-            # })
+            else:
+                form = ReviewForm({
+                    'author': request.user,
+                    'story': story,
+                })
+
+                context_dict.update({
+                    'form': form,
+                })
 
     # if the user is not logged in:
     else:
