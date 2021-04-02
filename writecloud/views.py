@@ -1,3 +1,4 @@
+from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -6,6 +7,7 @@ from django.db.models import Count, Avg
 from django.db.models import F
 from django.views.decorators.csrf import csrf_exempt
 
+from project import settings
 from writecloud.models import Story
 from django.contrib.auth.models import User
 
@@ -14,7 +16,7 @@ from .forms import *
 
 # Create your views here.
 
-
+@login_required
 def index(request):
     return render(request, 'writecloud/index.html')
 
@@ -23,6 +25,7 @@ def contact(request):
     return render(request, 'writecloud/contact.html')
 
 
+@login_required
 def account(request):
     return render(request, 'writecloud/account.html')
 
@@ -65,12 +68,12 @@ def user_login(request):
         return render(request, 'writecloud/login.html', context={'disabled': False, 'fail': False})
 
 
-@login_required
 def user_logout(request):
     logout(request)
-    return redirect(reverse('writecloud:index'))
+    return redirect(reverse('writecloud:login'))
 
 
+@login_required
 def create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -92,6 +95,7 @@ def create(request):
     return render(request, 'writecloud/createStory.html')
 
 
+@login_required
 def story(request, story_uuid):
     # get the story for the requested UUID or redirect to a 404 page
     story = get_object_or_404(Story, pk=story_uuid)
@@ -227,6 +231,7 @@ def story(request, story_uuid):
     return render(request, 'writecloud/story.html', context=context_dict)
 
 
+@login_required
 def top_stories(request):
     stories = Story.objects.all()
 
