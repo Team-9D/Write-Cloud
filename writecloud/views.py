@@ -6,7 +6,7 @@ from django.db.models import Count, Avg
 from django.db.models import F
 from django.views.decorators.csrf import csrf_exempt
 
-from writecloud.models import Story
+from writecloud.models import Story, UserProfile
 from django.contrib.auth.models import User
 
 from .forms import *
@@ -244,3 +244,44 @@ def top_stories(request):
         context_dict['stories'].append(story_dict)
 
     return render(request, 'writecloud/top_stories.html', context=context_dict)
+
+    def AccountView(View):
+        def get_user_details(self, username):
+            try:
+                user = User.objects.get(username=username)
+            except:
+                User.DoesNotExist
+                return None
+            user_account = UserProfile.objects.get_or_create(user=user)[0]
+            form = UserAccountForm({'website': user_account.wesbite, 'picture': user_account.pitcure})
+
+            return(user,user_account,form)
+
+        @method_decorator(login_required)
+        def get(self, request, username):
+            try:
+                (user, user_account, form) = self.get_user_details(username)
+            except:
+                TypeError
+                return redirect(reverse('writecloud:index'))
+            context_dict= {'user_account': user_account,'selected_user': user,'form': form}
+            return render(request, 'writecloud/account.html, context_dict')
+        
+        @method_decorator(login_required)
+        def post(self,request,username):
+            try:
+                (user,user_account, form) = self.get_user_details(username)
+            except TypeError:
+                return redirect(reverse('writecloud:index'))
+            form = UserAccountForm(request.POST, request.FILES, instance = user_account)
+
+            if form.is_valid():
+                form.save(commit=True)
+                return redirect('writecloud:account', user.username)
+            else:
+                print(form.errors)
+            
+            context_dict = {'user_account':user_account, 'selected_user':user, 'form':form}
+
+            return render(request, 'writecloud/account.html', context_dict)
+

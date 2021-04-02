@@ -22,3 +22,6 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ('stars', 'body', 'author', 'story')
 
+class UserAccountForm(forms.ModelForm):
+    UserProfile = ('user_account', 'selected_user', 'form')
+
