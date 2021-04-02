@@ -61,3 +61,27 @@ def return_content(pages, counter):
 @register.filter
 def return_image(pages, counter):
     return pages[counter]['image'].url
+
+
+@register.filter
+def return_last_number(pages):
+    if len(pages) > 0:
+        return pages[-1]['number']
+    else:
+        return 0
+
+
+@register.filter
+def return_new_number(pages):
+    if len(pages) > 0:
+        return pages[-1]['number'] + 1
+    else:
+        return 1
+
+
+@register.filter
+def check_unique_author(pages, user):
+    for i in range(len(pages)):
+        if str(pages[i]['author']) == user.username:
+            return False
+    return True

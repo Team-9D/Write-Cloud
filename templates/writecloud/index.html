@@ -60,23 +60,21 @@
         <div class="col-md-1 col-sm-1 col-lg-1" >
         </div>
       <div class="col-md-6 col-sm-6 col-lg-6">
-        <!-- <div class="row">
-            <li><a class="inside" href="#">Start a new story</a></li>
-        </div> -->
-        <!-- <div class="row">
-            <li><a class="inside" href="#">Title</a></li>
+        <div class="row">
+            <li><a class="inside" href="{% url 'writecloud:create_story' %}">Start a new story</a></li>
         </div>
         <div class="row">
-            <li><a class="inside" href="#">Select a template</a></li>
-        </div> -->
+            <li><a class="inside" href="{% url 'writecloud:create_story' %}">Title</a></li>
+        </div>
+        <div class="row">
+            <li><a class="inside" href="{% url 'writecloud:create_story' %}">Select a template</a></li>
+        </div>
           <div class="row">
             <div class="col-md-8 col-sm-8 col-lg-8">
-                <form>
-                  <div class="form-group">
-                      <textarea class="form-control" placeholder="Write new story to the cloud"
+                  <div onclick="location.href='{% url 'writecloud:create_story' %}';">
+                      <textarea class="form-control" readonly placeholder="Write new story to the cloud"
                                 id="input" rows="6"></textarea>
                   </div>
-                </form>
             </div>
           </div>
       </div>

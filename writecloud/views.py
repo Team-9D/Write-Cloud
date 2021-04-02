@@ -93,7 +93,6 @@ def create(request):
 
 
 def story(request, story_uuid):
-
     # get the story for the requested UUID or redirect to a 404 page
     story = get_object_or_404(Story, pk=story_uuid)
 
@@ -177,6 +176,13 @@ def story(request, story_uuid):
                         'counter': story.counter,
                     })
                     return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
+                if 'voteForm' in request.POST:
+                    form = ReviewForm(request.POST)
+                    if form.is_valid():
+                        form.save()
+                    Review.objects.create(body='form.body', stars=2,
+                                          author=form.author,
+                                          story=form.story)
                 else:
                     number = request.POST.get('number')
                     image = request.FILES.get('image')
@@ -189,15 +195,15 @@ def story(request, story_uuid):
 
 
             # if the request is GET, pass them the default bound form
-            # else:
-            # form = ReviewForm({
-            #     'author': request.user,
-            #     'story': story,
-            # })
-            #
-            # context_dict.update({
-            #     'form': form,
-            # })
+            else:
+                form = ReviewForm({
+                    'author': request.user,
+                    'story': story,
+                })
+
+                context_dict.update({
+                    'form': form,
+                })
 
     # if the user is not logged in:
     else:
