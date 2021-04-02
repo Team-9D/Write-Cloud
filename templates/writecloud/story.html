@@ -214,6 +214,15 @@ button:hover {
     background-color: #23d5d2;
     color: white;
 }
+#star_rating{
+    color: #23d5d2 !important;
+}
+h2{
+    color: #23d5d2 !important;
+}
+.rate{
+    margin-left: 6%;
+}
 </style>
     <div class="row">
         <div class="col-md-6 col-sm-6 col-lg-6">
@@ -352,8 +361,16 @@ function validate() {
     {% if pages|length == total_pages %}
         {% if user_review.present %}
             <h2 class="inside">Your review</h2>
-            {{ user_review.stars }} / 5 <br />
-            {{ user_review.body}} <br />
+            <div class="row">
+            <div class="rate">
+                {% for star in user_review.stars|get_range %}
+                    <label for="star1" id="star_rating" title="text">1 star</label>
+                {% endfor %}
+            </div>
+        </div>
+            <div class="row">
+                <i id="vote_content">{{ user_review.body }}</i>
+            </div>
         {% else %}
             <div class="row">
                 <h2 class="inside">Review this Story</h2>
@@ -391,19 +408,28 @@ function validate() {
                 </div>
 
 
-                <button id="voteForm" name="voteForm" >Submit review</button>
+                <button id="voteForm" name="voteForm" onclick="setTimeout(function(){window.location.reload();},10);">
+                    Submit review</button>
             </form>
         {% endif %}
 
     <h2 class="inside">Reviews</h2>
-    <p id="vote"><b>{{ stars }} / 5</b> stars out of a total of <b>{{ total }}</b> reviews</p>
+    <p id="vote">
+        <b>{{ stars }} / 5</b> stars out of a total of <b>{{ total }}</b> reviews
+    </p>
+    </div>
+
 
     {% for review in reviews %}
         <div class="row">
             <i id="vote_author">{{ review.author }}</i>
         </div>
         <div class="row">
-            <i id="vote_content">{{ review.stars }}</i>
+            <div class="rate">
+                {% for star in review.stars|get_range %}
+                    <label for="star1" id="star_rating" title="text">1 star</label>
+                {% endfor %}
+            </div>
         </div>
         <div class="row">
             <i id="vote_content">{{ review.body }}</i>

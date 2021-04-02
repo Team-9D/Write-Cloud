@@ -85,3 +85,17 @@ def check_unique_author(pages, user):
         if str(pages[i]['author']) == user.username:
             return False
     return True
+
+
+@register.filter
+def get_range(stars):
+    if stars == 1:
+        return '1'
+    if stars == 2:
+        return '12'
+    if stars == 3:
+        return '123'
+    if stars == 4:
+        return '1234'
+    else:
+        return '12345'

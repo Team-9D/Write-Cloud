@@ -111,7 +111,7 @@ def story(request, story_uuid):
         'total_pages': story.length,
         'pages': [],
         'counter': story.counter,
-        # 'stars': f"{stars:.1f}",
+        'stars': str(stars)[:4],
         'total': total,
         'include_images': story.include_images,
         'template': story.template,
@@ -243,7 +243,7 @@ def top_stories(request):
             'uuid': story.uuid,
             'title': story.title,
             'author': story.author,
-            # 'stars': f"{stars:.1f}",
+            'stars': str(stars)[:4],
             'total': total,
         }
         context_dict['stories'].append(story_dict)
