@@ -177,12 +177,11 @@ def story(request, story_uuid):
                     })
                     return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
                 if 'voteForm' in request.POST:
-                    form = ReviewForm(request.POST)
-                    if form.is_valid():
-                        form.save()
-                    Review.objects.create(body='form.body', stars=2,
-                                          author=form.author,
-                                          story=form.story)
+                    body = request.POST.get('review')
+                    stars = request.POST.get('rate')
+                    Review.objects.create(body=body, stars=stars,
+                                          author=request.user,
+                                          story=story)
                 else:
                     number = request.POST.get('number')
                     image = request.FILES.get('image')

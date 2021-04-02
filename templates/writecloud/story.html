@@ -138,7 +138,7 @@ button:hover {
 }
 
 .next {
-  background-color: #ee7752;;
+  background-color: #ee7752;
   color: white;
 }
 
@@ -156,10 +156,63 @@ button:hover {
 {% endif %}
   color: white;
 }
-#comment{
+#review{
     margin-left: 2%;
     margin-right: 25%;
-    border-radius: 15px;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+.rate {
+    margin-left: 5%;
+    margin-bottom: 1%;
+    float: left;
+    height: 2vw;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #23d5d2;
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #23d5d2;
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #23d5d2;
+}
+#review{
+    margin-left: 5%;
+    height: 2vw;
+    width: 40vw;
+    outline: none;
+    background-color: #23d5d2;
+    color: white;
+}
+#voteForm{
+    margin-left: 4%;
+    margin-top: 1%;
+    background-color: #23d5d2;
+    color: white;
 }
 </style>
     <div class="row">
@@ -302,25 +355,41 @@ function validate() {
             {{ user_review.stars }} / 5 <br />
             {{ user_review.body}} <br />
         {% else %}
-            <h2 class="inside">Review this Story</h2>
+            <div class="row">
+                <h2 class="inside">Review this Story</h2>
+            </div>
             <form action="{% url 'writecloud:story' uuid %}" method="POST">
                 {% csrf_token %}
 
-                <b id="vote">Give a rating:</b> <br />
                 <div class="row">
-                {% for radio in form.stars %}
-                    {{ radio }}
-                {% endfor %}
+                    <b id="vote">Give a rating:</b>
                 </div>
 
-
-                <b id="vote">Leave your comments here:</b>
-                <div id="comment">
-                    {{ form.body }}
+                <div class="row">
+                  <div class="rate">
+                    <input type="radio" id="star5" name="rate" value="5" />
+                    <label for="star5" title="text">5 stars</label>
+                    <input type="radio" id="star4" name="rate" value="4" />
+                    <label for="star4" title="text">4 stars</label>
+                    <input type="radio" id="star3" name="rate" value="3" />
+                    <label for="star3" title="text">3 stars</label>
+                    <input type="radio" id="star2" name="rate" value="2" />
+                    <label for="star2" title="text">2 stars</label>
+                    <input type="radio" id="star1" name="rate" value="1" />
+                    <label for="star1" title="text">1 star</label>
+                  </div>
                 </div>
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
+
+                <div class="row">
+                    <b id="vote">Leave a comment below:</b>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <input type="review" id="review" name="review">
+                    </div>
+                </div>
+
 
                 <button id="voteForm" name="voteForm" >Submit review</button>
             </form>
