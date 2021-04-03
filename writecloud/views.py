@@ -37,7 +37,11 @@ def index(request):
             'stars': str(stars)[:1],
             'total_reviews': int(Review.objects.filter(story=story).count()),
         }
-        context['stories'].append(story_dict)
+
+        # Only attach completed stories
+        completed_pages = Page.objects.filter(story=story).count()
+        if completed_pages == story.length:
+            context['stories'].append(story_dict)
 
     def get_my_key(obj):
         return obj['total_reviews']

@@ -93,7 +93,7 @@
         <div class="row">
             <div class="col-md-9 col-sm-9 col-lg-9">
                 <form>
-                  <div class="form-group">
+                  <div class="form-group" onclick="location.href='{% url 'writecloud:top_stories' %}';">
                       <textarea class="form-control" placeholder="Click to choose a story from the cloud"
                                 id="input" rows="6" ></textarea>
                   </div>
@@ -104,9 +104,11 @@
         <div class="col-md-1 col-sm-1 col-lg-1" >
         </div>
     </div>
+    {% if stories|length > 0 %}
     <div class="row d-flex justify-content-center text-center" id="rankings">
-            <li><a class="inside" href="#">Top Stories</a></li>
+            <li><a class="inside" href="#">Top {{ stories|length }} Stories</a></li>
     </div>
+    {% endif %}
     {% for story in stories %}
     <div class="row">
         <div class="col-md-1 col-sm-1 col-lg-1">
