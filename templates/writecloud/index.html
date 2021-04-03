@@ -51,10 +51,6 @@
     color: #23d5d2;
 }
 
-.glyphicon-star-empty {
-    color: #dcf3f3;
-}
-
 </style>
     <div class="row">
         <div class="col-md-1 col-sm-1 col-lg-1" >
@@ -114,21 +110,21 @@
         <div class="col-md-1 col-sm-1 col-lg-1">
         </div>
         <div class="col-md-3 col-sm-3 col-lg-3">
-        <li><a href="#" class="inside">{{ forloop.counter }}. {{ story.title }}</a></li>
+        <li><a href="{% url 'writecloud:story' story.uuid %}" class="inside">{{ forloop.counter }}. {{ story.title }}</a></li>
         </div>
         <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
             <div class="row">
             <div class="rate">
                 {% for star in story.stars|get_top_range %}
                     <div class="col-md-2 col-sm-2 col-lg-2">
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
+                        <span class="glyphicon glyphicon-star"></span>
+                    </div>
                 {% endfor %}
             </div>
         </div>
         </div>
         <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
-            <li><a class="comment" href="#">{{ story.total_reviews }} Reviews</a></li>
+            <li><a class="comment" href="{% url 'writecloud:story' story.uuid %}">{{ story.total_reviews }} Reviews</a></li>
         </div>
         <div class="col-md-1 col-sm-1 col-lg-1">
         </div>

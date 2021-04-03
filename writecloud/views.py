@@ -46,6 +46,7 @@ def index(request):
     def get_my_key(obj):
         return obj['total_reviews']
 
+    # Display up to 5 top stories
     context['stories'].sort(key=get_my_key, reverse=True)
     context['stories'] = context['stories'][:5]
     return render(request, 'writecloud/index.html', context=context)
@@ -263,25 +264,51 @@ def story(request, story_uuid):
 
 @login_required
 def top_stories(request):
+    # stories = Story.objects.all()
+    #
+    # context_dict = {
+    #     'stories': [],
+    # }
+    #
+    # for story in stories:
+    #     review = story.reviews.all()
+    #     stars = review.aggregate(Avg('stars'))['stars__avg']
+    #     total = review.aggregate(Count('stars'))['stars__count']
+    #
+    #     story_dict = {
+    #         'uuid': story.uuid,
+    #         'title': story.title,
+    #         'author': story.author,
+    #         'stars': str(stars)[:4],
+    #         'total': total,
+    #         'total_review': Review.objects.filter(story=story).count(),
+    #     }
+    #     context_dict['stories'].append(story_dict)
     stories = Story.objects.all()
-
-    context_dict = {
+    context = {
         'stories': [],
     }
 
     for story in stories:
         review = story.reviews.all()
         stars = review.aggregate(Avg('stars'))['stars__avg']
-        total = review.aggregate(Count('stars'))['stars__count']
 
         story_dict = {
             'uuid': story.uuid,
             'title': story.title,
-            'author': story.author,
-            'stars': str(stars)[:4],
-            'total': total,
-            'total_review': Review.objects.filter(story=story).count(),
+            'stars': str(stars)[:1],
+            'total_reviews': int(Review.objects.filter(story=story).count()),
         }
-        context_dict['stories'].append(story_dict)
 
-    return render(request, 'writecloud/top_stories.html', context=context_dict)
+        # Only attach completed stories
+        completed_pages = Page.objects.filter(story=story).count()
+        if completed_pages == story.length:
+            context['stories'].append(story_dict)
+
+    def get_my_key(obj):
+        return obj['total_reviews']
+
+    # Display all finished stories
+    context['stories'].sort(key=get_my_key, reverse=True)
+
+    return render(request, 'writecloud/top_stories.html', context=context)

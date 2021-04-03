@@ -111,5 +111,7 @@ def get_top_range(stars):
         return '123'
     if stars == '4':
         return '1234'
-    else:
+    if stars == '5':
         return '12345'
+    else:
+        return ''
