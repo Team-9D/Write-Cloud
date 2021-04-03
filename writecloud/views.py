@@ -264,26 +264,6 @@ def story(request, story_uuid):
 
 @login_required
 def top_stories(request):
-    # stories = Story.objects.all()
-    #
-    # context_dict = {
-    #     'stories': [],
-    # }
-    #
-    # for story in stories:
-    #     review = story.reviews.all()
-    #     stars = review.aggregate(Avg('stars'))['stars__avg']
-    #     total = review.aggregate(Count('stars'))['stars__count']
-    #
-    #     story_dict = {
-    #         'uuid': story.uuid,
-    #         'title': story.title,
-    #         'author': story.author,
-    #         'stars': str(stars)[:4],
-    #         'total': total,
-    #         'total_review': Review.objects.filter(story=story).count(),
-    #     }
-    #     context_dict['stories'].append(story_dict)
     stories = Story.objects.all()
     context = {
         'stories': [],
@@ -312,3 +292,27 @@ def top_stories(request):
     context['stories'].sort(key=get_my_key, reverse=True)
 
     return render(request, 'writecloud/top_stories.html', context=context)
+
+
+@login_required
+def continue_story(request):
+    stories = Story.objects.all()
+    context = {
+        'stories': [],
+    }
+
+    for story in stories:
+        story_dict = {
+            'uuid': story.uuid,
+            'title': story.title,
+            'authors': int(Page.objects.filter(story=story).count()),
+            'length': story.length,
+        }
+
+        # Only attach unfinished stories
+        completed_pages = Page.objects.filter(story=story).count()
+        if completed_pages != story.length:
+            context['stories'].append(story_dict)
+
+    return render(request, 'writecloud/continue_story.html', context=context)
+

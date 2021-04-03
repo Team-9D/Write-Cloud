@@ -78,18 +78,18 @@
         </div>
       <div class="col-md-5 col-sm-5 col-lg-5">
         <div class="row">
-            <li><a class="inside" href="{% url 'writecloud:top_stories' %}">Continue a Progressing Story</a></li>
+            <li><a class="inside" href="{% url 'writecloud:continue_story' %}">Continue a Progressing Story</a></li>
         </div>
         <div class="row">
             <li><a class="inside">{{ total_stories }} Stories</a></li>
         </div>
         <div class="row">
-            <li><a class="inside" href="#">{{ total_users }} Users</a></li>
+            <li><a class="inside">{{ total_users }} Users</a></li>
         </div>
         <div class="row">
             <div class="col-md-9 col-sm-9 col-lg-9">
                 <form>
-                  <div class="form-group" onclick="location.href='{% url 'writecloud:top_stories' %}';">
+                  <div class="form-group" onclick="location.href='{% url 'writecloud:continue_story' %}';">
                       <textarea class="form-control" placeholder="Click to choose a story from the cloud"
                                 id="input" rows="6" ></textarea>
                   </div>
