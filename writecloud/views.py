@@ -1,3 +1,5 @@
+import operator
+
 from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -18,7 +20,31 @@ from .forms import *
 
 @login_required
 def index(request):
-    return render(request, 'writecloud/index.html')
+    stories = Story.objects.all()
+    context = {
+        'total_stories': Story.objects.count(),
+        'total_users': User.objects.count(),
+        'stories': [],
+    }
+
+    for story in stories:
+        review = story.reviews.all()
+        stars = review.aggregate(Avg('stars'))['stars__avg']
+
+        story_dict = {
+            'uuid': story.uuid,
+            'title': story.title,
+            'stars': str(stars)[:1],
+            'total_reviews': int(Review.objects.filter(story=story).count()),
+        }
+        context['stories'].append(story_dict)
+
+    def get_my_key(obj):
+        return obj['total_reviews']
+
+    context['stories'].sort(key=get_my_key, reverse=True)
+    context['stories'] = context['stories'][:5]
+    return render(request, 'writecloud/index.html', context=context)
 
 
 def contact(request):
@@ -250,6 +276,7 @@ def top_stories(request):
             'author': story.author,
             'stars': str(stars)[:4],
             'total': total,
+            'total_review': Review.objects.filter(story=story).count(),
         }
         context_dict['stories'].append(story_dict)
 

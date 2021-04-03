@@ -99,3 +99,17 @@ def get_range(stars):
         return '1234'
     else:
         return '12345'
+
+
+@register.filter
+def get_top_range(stars):
+    if stars == '1':
+        return '1'
+    if stars == '2':
+        return '12'
+    if stars == '3':
+        return '123'
+    if stars == '4':
+        return '1234'
+    else:
+        return '12345'

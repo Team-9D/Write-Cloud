@@ -82,13 +82,13 @@
         </div>
       <div class="col-md-5 col-sm-5 col-lg-5">
         <div class="row">
-            <li><a class="inside" href="#">Continue a Progressing Story</a></li>
+            <li><a class="inside" href="{% url 'writecloud:top_stories' %}">Continue a Progressing Story</a></li>
         </div>
         <div class="row">
-            <li><a class="inside" href="#">Number of Stories</a></li>
+            <li><a class="inside">{{ total_stories }} Stories</a></li>
         </div>
         <div class="row">
-            <li><a class="inside" href="#">Number of Active Users</a></li>
+            <li><a class="inside" href="#">{{ total_users }} Users</a></li>
         </div>
         <div class="row">
             <div class="col-md-9 col-sm-9 col-lg-9">
@@ -105,176 +105,31 @@
         </div>
     </div>
     <div class="row d-flex justify-content-center text-center" id="rankings">
-            <li><a class="inside" href="#">Top 5 Stories</a></li>
+            <li><a class="inside" href="#">Top Stories</a></li>
     </div>
+    {% for story in stories %}
     <div class="row">
         <div class="col-md-1 col-sm-1 col-lg-1">
         </div>
         <div class="col-md-3 col-sm-3 col-lg-3">
-        <li><a href="#" class="inside">1. This is first Story</a></li>
+        <li><a href="#" class="inside">{{ forloop.counter }}. {{ story.title }}</a></li>
         </div>
         <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
+            <div class="row">
+            <div class="rate">
+                {% for star in story.stars|get_top_range %}
+                    <div class="col-md-2 col-sm-2 col-lg-2">
                 <span class="glyphicon glyphicon-star"></span>
             </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-3 col-sm-3 col-lg-3">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
+                {% endfor %}
             </div>
         </div>
+        </div>
         <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
-            <li><a class="comment" href="#">300 Comments</a></li>
+            <li><a class="comment" href="#">{{ story.total_reviews }} Reviews</a></li>
         </div>
         <div class="col-md-1 col-sm-1 col-lg-1">
         </div>
     </div>
-     <div class="row">
-        <div class="col-md-1 col-sm-1 col-lg-1">
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3">
-        <li><a href="#" class="inside">2. This is second Story</a></li>
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-3 col-sm-3 col-lg-3">
-                <br/>
-                <span class="glyphicon glyphicon-star-empty"></span>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
-            <li><a class="comment" href="#">300 Comments</a></li>
-        </div>
-        <div class="col-md-1 col-sm-1 col-lg-1">
-        </div>
-    </div>
-     <div class="row">
-        <div class="col-md-1 col-sm-1 col-lg-1">
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3">
-        <li><a href="#" class="inside">3. This is third Story</a></li>
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-3 col-sm-3 col-lg-3">
-                <br/>
-                <span class="glyphicon glyphicon-star-empty"></span>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
-            <li><a class="comment" href="#">300 Comments</a></li>
-        </div>
-        <div class="col-md-1 col-sm-1 col-lg-1">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-1 col-sm-1 col-lg-1">
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3">
-        <li><a href="#" class="inside">4. This is fourth Story</a></li>
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-3 col-sm-3 col-lg-3">
-                <br/>
-                <span class="glyphicon glyphicon-star-empty"></span>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
-            <li><a class="comment" href="#">300 Comments</a></li>
-        </div>
-        <div class="col-md-1 col-sm-1 col-lg-1">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-1 col-sm-1 col-lg-1">
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3">
-        <li><a href="#" class="inside">5. This is fifth Story</a></li>
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star"></span>
-            </div>
-            <div class="col-md-2 col-sm-2 col-lg-2">
-                <br/>
-                <span class="glyphicon glyphicon-star-empty"></span>
-            </div>
-            <div class="col-md-3 col-sm-3 col-lg-3">
-                <br/>
-                <span class="glyphicon glyphicon-star-empty"></span>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
-            <li><a class="comment" href="#">300 Comments</a></li>
-        </div>
-        <div class="col-md-1 col-sm-1 col-lg-1">
-        </div>
-    </div>
+    {% endfor %}
 {% endblock body_block%}
