@@ -58,7 +58,32 @@ def contact(request):
 
 @login_required
 def account(request):
-    return render(request, 'writecloud/account.html')
+
+    context = {
+        'name': request.user,
+        'stories': [],
+
+    }
+
+    stories = Story.objects.all()
+    for story in stories:
+        story_dict = {
+            'uuid': story.uuid,
+            'title': story.title,
+            'length': story.length,
+            'initial_author': story.author,
+        }
+
+        # Only attach story with an author current user
+        user_in_story = ''
+        try:
+            user_in_story = Page.objects.filter(author=request.user, story=story)
+        except:
+            pass
+        if user_in_story != '':
+            context['stories'].append(story_dict)
+
+    return render(request, 'writecloud/account.html', context=context)
 
 
 def sign_up(request):
@@ -196,7 +221,6 @@ def story(request, story_uuid):
 
             # if the request is POST, validate and save the form
             if request.method == 'POST':
-                # form = ReviewForm(request.POST)
                 if 'rightClick' in request.POST:
                     story.counter = F('counter') + 1
                     story.save(update_fields=["counter"])
