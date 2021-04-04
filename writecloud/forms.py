@@ -1,15 +1,8 @@
 from django import forms
-from django.contrib.auth.models import User
 from .models import *
 
 
-class DocumentForm(forms.ModelForm):
-
-    docfile = forms.FileField(
-        label='Select a file',
-    )
-
-
+# Form for reviewing a story
 class ReviewForm(forms.ModelForm):
 
     stars = forms.IntegerField(widget=forms.RadioSelect(choices=[(i, i) for i in range(1, 6)]))

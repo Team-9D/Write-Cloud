@@ -1,18 +1,9 @@
-import operator
-
-from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Count, Avg
 from django.db.models import F
-from django.views.decorators.csrf import csrf_exempt
-
-from project import settings
-from writecloud.models import Story
-from django.contrib.auth.models import User
-
 from .forms import *
 
 
@@ -20,6 +11,7 @@ from .forms import *
 
 @login_required
 def index(request):
+    # Get all stories
     stories = Story.objects.all()
     context = {
         'total_stories': Story.objects.count(),
@@ -27,6 +19,7 @@ def index(request):
         'stories': [],
     }
 
+    # Loop stories and get top 5 most commented
     for story in stories:
         review = story.reviews.all()
         stars = review.aggregate(Avg('stars'))['stars__avg']
@@ -58,13 +51,13 @@ def contact(request):
 
 @login_required
 def account(request):
-
     context = {
         'name': request.user,
         'stories': [],
 
     }
 
+    # Loop stories and get only stories which current user has contributed to
     stories = Story.objects.all()
     for story in stories:
         story_dict = {
@@ -75,12 +68,10 @@ def account(request):
         }
 
         # Only attach story with an author current user
-        user_in_story = ''
-        try:
-            user_in_story = Page.objects.filter(author=request.user, story=story)
-        except:
+        user_in_story = Page.objects.filter(author=request.user, story=story)
+        if not user_in_story:
             pass
-        if user_in_story != '':
+        else:
             context['stories'].append(story_dict)
 
     return render(request, 'writecloud/account.html', context=context)
@@ -137,7 +128,7 @@ def create(request):
         length = request.POST.get('length')
         template = 1
         include_images = False
-        print(request.POST.get('template2'))
+        # Get the selected template or continue with first template
         if request.POST.get('template2') == '✓':
             template = 2
         if request.POST.get('template3') == '✓':
@@ -146,8 +137,10 @@ def create(request):
             template = 4
         if request.POST.get('include_images') == 'Images Included':
             include_images = True
-        Story.objects.create(title=title, subtitle=subtitle, length=length, author=request.user, template=template,
-                             include_images=include_images)
+        new_story = Story.objects.create(title=title, subtitle=subtitle, length=length, author=request.user,
+                                         template=template,
+                                         include_images=include_images)
+        return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': new_story.uuid}))
     return render(request, 'writecloud/createStory.html')
 
 
@@ -339,4 +332,3 @@ def continue_story(request):
             context['stories'].append(story_dict)
 
     return render(request, 'writecloud/continue_story.html', context=context)
-

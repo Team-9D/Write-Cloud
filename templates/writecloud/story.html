@@ -224,114 +224,115 @@ h2{
     margin-left: 6%;
 }
 </style>
-    <div class="row">
-        <div class="col-md-6 col-sm-6 col-lg-6">
-            <p class="inside">{{ title }}</p>
-        </div>
+
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-lg-6">
+        <p class="inside">{{ title }}</p>
     </div>
-    <div class="row">
-        <div class="col-md-6 col-sm-6 col-lg-6">
-            <p class="inside" id="sub">{{ subtitle }}</p>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-lg-6">
+        <p class="inside" id="sub">{{ subtitle }}</p>
     </div>
-    <div class="row">
-        <div class="col-md-6 col-sm-6 col-lg-6">
-            <p class="inside" id="author">Initial Author {{ author }}</p>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-lg-6">
+        <p class="inside" id="author">Initial Author {{ author }}</p>
     </div>
-    {% if counter < pages|length %}
-        <div class="card" >
-            <div class="row">
-                <div class="col-md-8 col-sm-8 col-lg-8">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-lg-12">
-                                  <div>
-{#                                      If only displaying#}
-                                        <textarea  readonly placeholder='{{  pages|return_content:counter}}' rows="25"></textarea>
-                                  </div>
-                            </div>
-                        </div>
-                </div>
-            {% if include_images %}
-                <div id ="image" class="col-md-3 col-sm-3 col-lg-3">
-                        <div class="row">
-                            <div class="col-md-2 col-sm-2 col-lg-2">
-                                        <div onclick="uploadFunction()" class="imgbox">
-                                            <img src="{{ pages|return_image:counter }}" id="upload-img">
-                                        </div>
-                            </div>
-                        </div>
-                </div>
-            {% endif %}
-            </div>
-            <div class="row">
-{#                This is the case where we are displaying content#}
-                <div id="page">
-                        <p>{{ pages|return_number:counter }}</p>
-                </div>
-            </div>
-    </div>
-    {% endif %}
-    {% if pages|return_last_number < total_pages and counter == pages|length or pages|length == 0 %}
+</div>
+{# This is the case where we are displaying content#}
+{% if counter < pages|length %}
     <div class="card" >
-        <form action="{% url 'writecloud:story' uuid %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
-            <div class="row">
-                <div class="col-md-8 col-sm-8 col-lg-8">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-lg-12">
-                                  <div>
-{#                                       If adding new content#}
-                                       <textarea placeholder='Continue your story here' id="content" name="content" rows="25"></textarea>
-                                  </div>
-                            </div>
+        <div class="row">
+            <div class="col-md-8 col-sm-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-lg-12">
+                              <div>
+                                    <textarea  readonly placeholder='{{  pages|return_content:counter}}' rows="25"></textarea>
+                              </div>
                         </div>
-                </div>
-            {% if include_images %}
-                <div id ="image" class="col-md-3 col-sm-3 col-lg-3">
-                        <div class="row">
-                            <div class="col-md-2 col-sm-2 col-lg-2">
-                                        <div onclick="uploadFunction()" class="imgbox">
-                                            {% if template ==  1 or template ==  3%}
-                                            <img src="{% static "upload.png" %}" id="upload-img">
-                                            {% endif %}
-                                            {% if template ==  2 or template ==  4%}
-                                            <img src="{% static "upload1.png" %}" id="upload-img">
-                                            {% endif %}
-                                        </div>
-                                    <div class="custom-file">
-                                        <input  type="file" id="fileupload" name="image">
+                    </div>
+            </div>
+        {% if include_images %}
+            <div id ="image" class="col-md-3 col-sm-3 col-lg-3">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2 col-lg-2">
+                                    <div onclick="uploadFunction()" class="imgbox">
+                                        <img src="{{ pages|return_image:counter }}" id="upload-img">
                                     </div>
-                            </div>
                         </div>
-                </div>
-            {% endif %}
+                    </div>
             </div>
-            <div class="row">
-{#                Now the case where we want to add new content#}
-                <div id="page">
-                            <p> {{ pages|return_new_number }} </p>
-                            <input hidden type="number" id="number" name="number" value="{{ pages|return_new_number  }}">
-                </div>
+        {% endif %}
+        </div>
+        <div class="row">
+            <div id="page">
+                    <p>{{ pages|return_number:counter }}</p>
             </div>
-            {% if pages|check_unique_author:user %}
-            <button id="upload" type="submit" hidden>Upload</button>
-            {% endif %}
-        </form>
-    {% endif %}
-    </div>
-    <div class="row" id="arrows">
-    {% if counter > 0 %}
-        <form id="leftClick_form" method="post" action="{% url 'writecloud:story' uuid %}">{% csrf_token %}
-            <button id="leftClick" name="leftClick" value="{{ counter }}" class="previous">&laquo; Previous</button>
-        </form>
-    {% endif %}
-    {% if pages|return_number:counter < total_pages %}
-    <form id="rightClick_form" method="post" action="{% url 'writecloud:story' uuid %}">{% csrf_token %}
-        <button id="rightClick" name="rightClick" value="{{ counter }}" class="next">Next &raquo;</button>
+        </div>
+</div>
+{% endif %}
+{# Now the case where we want to add new content#}
+{% if pages|return_last_number < total_pages and counter == pages|length or pages|length == 0 %}
+<div class="card" >
+    <form action="{% url 'writecloud:story' uuid %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <div class="row">
+            <div class="col-md-8 col-sm-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-lg-12">
+                              <div>
+                                   <textarea placeholder='Continue your story here' id="content" name="content" rows="25"></textarea>
+                              </div>
+                        </div>
+                    </div>
+            </div>
+        {% if include_images %}
+            <div id ="image" class="col-md-3 col-sm-3 col-lg-3">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2 col-lg-2">
+                                    <div onclick="uploadFunction()" class="imgbox">
+                                        {% if template ==  1 or template ==  3%}
+                                        <img src="{% static "upload.png" %}" id="upload-img">
+                                        {% endif %}
+                                        {% if template ==  2 or template ==  4%}
+                                        <img src="{% static "upload1.png" %}" id="upload-img">
+                                        {% endif %}
+                                    </div>
+                                <div class="custom-file">
+                                    <input  type="file" id="fileupload" name="image">
+                                </div>
+                        </div>
+                    </div>
+            </div>
+        {% endif %}
+        </div>
+        <div class="row">
+            <div id="page">
+                        <p> {{ pages|return_new_number }} </p>
+                        <input hidden type="number" id="number" name="number" value="{{ pages|return_new_number  }}">
+            </div>
+        </div>
+        {% if pages|check_unique_author:user %}
+        <button id="upload" type="submit" hidden>Upload</button>
+        {% endif %}
     </form>
-    {% endif %}
-    </div>
+{% endif %}
+</div>
+<div class="row" id="arrows">
+{% if counter > 0 %}
+    <form id="leftClick_form" method="post" action="{% url 'writecloud:story' uuid %}">{% csrf_token %}
+        <button id="leftClick" name="leftClick" value="{{ counter }}" class="previous">&laquo; Previous</button>
+    </form>
+{% endif %}
+{% if pages|return_number:counter < total_pages %}
+<form id="rightClick_form" method="post" action="{% url 'writecloud:story' uuid %}">{% csrf_token %}
+    <button id="rightClick" name="rightClick" value="{{ counter }}" class="next">Next &raquo;</button>
+</form>
+{% endif %}
+</div>
+
 <script>
+{#Upload image file onclick event#}
 function uploadFunction(){
     document.getElementById("fileupload").click();
 }
@@ -343,6 +344,7 @@ jQuery("#content, #fileupload").on("input", function () {
     }
 });
 
+{#Only allow submission of page with exisitng fields#}
 function validate() {
   let isValid = true;
   $('input, textarea').each(function() {
@@ -356,7 +358,6 @@ function validate() {
 {% endblock %}
 
 {#display comments if story complete#}
-
 {% block footer_block %}
     {% if pages|length == total_pages %}
         {% if user_review.present %}
@@ -417,8 +418,6 @@ function validate() {
     <p id="vote">
         <b>{{ stars }} / 5</b> stars out of a total of <b>{{ total }}</b> reviews
     </p>
-    </div>
-
 
     {% for review in reviews %}
         <div class="row">
