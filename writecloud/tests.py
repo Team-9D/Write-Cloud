@@ -8,7 +8,8 @@ class StoryModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         User.objects.create_user(username='Test_name', email='', password='0000')
-        Story.objects.create(title='First_Test_Story', subtitle='This is the first test story', length='2', author=User.objects.last())
+        Story.objects.create(title='First_Test_Story', subtitle='This is the first test story', length='2',
+                             author=User.objects.last())
 
     def test_title_label(self):
         story = Story.objects.last()
@@ -60,7 +61,8 @@ class PageModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         User.objects.create_user(username='Another_test', email='', password='0000')
-        Story.objects.create(title='First_Test_Story', subtitle='This is the first test story', length='2', author=User.objects.last())
+        Story.objects.create(title='First_Test_Story', subtitle='This is the first test story', length='2',
+                             author=User.objects.last())
         Page.objects.create(content='Test_Content', story=Story.objects.last(), author=User.objects.last(), number='1')
 
     def test_number(self):
@@ -85,7 +87,8 @@ class PageModelTest(TestCase):
 
     def test_author_constraint(self):
         try:
-            Page.objects.create(content='Test_Content', story=Story.objects.last(), author=User.objects.first(), number='2')
+            Page.objects.create(content='Test_Content', story=Story.objects.last(), author=User.objects.first(),
+                                number='2')
         except Exception as e:
             self.assertEqual(str(e), 'UNIQUE constraint failed: writecloud_page.story_id, writecloud_page.author_id')
 
@@ -188,3 +191,184 @@ class IndexViewTest(TestCase):
         self.client.post('/', User.objects.last().username, User.objects.last().password)
         response = self.client.get('/home/')
         self.assertTemplateUsed(response, 'writecloud/index.html')
+
+
+class CreateViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create 2 users for tests
+        number_of_users = 2
+
+        for user_id in range(number_of_users):
+            User.objects.create_user(
+                username=f'TestName{user_id}',
+                password=f'TestPass{user_id}',
+                email=''
+            )
+
+    # Test if redirected when user is not logged in
+    def test_redirect_no_user(self):
+        response = self.client.get('/create/')
+        self.assertEqual(response.status_code, 302)
+
+    # Test correct access when user is logged in
+    def test_view_url_exists_logged_in(self):
+        username = User.objects.last().username
+        password = User.objects.last().password
+        self.client.force_login(User.objects.last(), backend=None)
+        self.client.post('/', username, password)
+        response = self.client.get('/create/')
+        self.assertEqual(response.status_code, 200)
+
+    # Test correct creation of story and redirection to story after creation
+    def test_sign_up_redirect(self):
+        title = "Test story"
+        subtitle = "Test subtitle"
+        length = 2
+        template = 1
+        include_images = False
+        self.client.force_login(User.objects.last(), backend=None)
+        response = self.client.post('/create/', data={'title': title, 'subtitle': subtitle, 'length': length,
+                                           'include_images': include_images, 'template': template})
+        uuid = Story.objects.last().uuid
+        self.assertEqual(title, Story.objects.last().title)
+        self.assertEqual(subtitle, Story.objects.last().subtitle)
+        self.assertEqual(length, Story.objects.last().length)
+        self.assertEqual(template, Story.objects.last().template)
+        self.assertEqual(include_images, Story.objects.last().include_images)
+        self.assertRedirects(response, expected_url=reverse('writecloud:story', kwargs={'story_uuid': uuid}))
+
+    # Test if correct template used
+    def test_view_uses_correct_template(self):
+        self.client.force_login(User.objects.last(), backend=None)
+        self.client.post('/', User.objects.last().username, User.objects.last().password)
+        response = self.client.get('/create/')
+        self.assertTemplateUsed(response, 'writecloud/createStory.html')
+
+
+class TopStoriesTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create 1 users for tests
+        number_of_users = 1
+
+        for user_id in range(number_of_users):
+            User.objects.create_user(
+                username=f'TestName{user_id}',
+                password=f'TestPass{user_id}',
+                email=''
+            )
+
+    # Test if redirected when user is not logged in
+    def test_redirect_no_user(self):
+        response = self.client.get('/top/')
+        self.assertEqual(response.status_code, 302)
+
+    # Test correct access when user is logged in
+    def test_view_url_exists_logged_in(self):
+        username = User.objects.last().username
+        password = User.objects.last().password
+        self.client.force_login(User.objects.last(), backend=None)
+        self.client.post('/', username, password)
+        response = self.client.get('/top/')
+        self.assertEqual(response.status_code, 200)
+
+    # Test if correct template used
+    def test_view_uses_correct_template(self):
+        self.client.force_login(User.objects.last(), backend=None)
+        self.client.post('/', User.objects.last().username, User.objects.last().password)
+        response = self.client.get('/top/')
+        self.assertTemplateUsed(response, 'writecloud/top_stories.html')
+
+
+class AccountTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        User.objects.create_user(
+            username=f'TestName1',
+            password=f'TestPass1',
+            email=''
+        )
+
+    # Test if redirected when user is not logged in
+    def test_redirect_no_user(self):
+        response = self.client.get('/account/')
+        self.assertEqual(response.status_code, 302)
+
+    # Test correct access when user is logged in
+    def test_view_url_exists_logged_in(self):
+        username = User.objects.last().username
+        password = User.objects.last().password
+        self.client.force_login(User.objects.last(), backend=None)
+        self.client.post('/', username, password)
+        response = self.client.get('/account/')
+        self.assertEqual(response.status_code, 200)
+
+    # Test if correct template used
+    def test_view_uses_correct_template(self):
+        self.client.force_login(User.objects.last(), backend=None)
+        self.client.post('/', User.objects.last().username, User.objects.last().password)
+        response = self.client.get('/account/')
+        self.assertTemplateUsed(response, 'writecloud/account.html')
+
+
+class ContactTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        User.objects.create_user(
+            username='TestName1',
+            password='TestPass1',
+            email=''
+        )
+
+    # Test if redirected when user is not logged in, contact should be accessible without logged user
+    def test_redirect_no_user(self):
+        response = self.client.get('/contact/')
+        self.assertEqual(response.status_code, 200)
+
+    # Test correct access when user is logged in
+    def test_view_url_exists_logged_in(self):
+        username = User.objects.last().username
+        password = User.objects.last().password
+        self.client.force_login(User.objects.last(), backend=None)
+        self.client.post('/', username, password)
+        response = self.client.get('/contact/')
+        self.assertEqual(response.status_code, 200)
+
+    # Test if correct template used
+    def test_view_uses_correct_template(self):
+        self.client.force_login(User.objects.last(), backend=None)
+        self.client.post('/', User.objects.last().username, User.objects.last().password)
+        response = self.client.get('/contact/')
+        self.assertTemplateUsed(response, 'writecloud/contact.html')
+
+
+class SignUp(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        User.objects.create_user(
+            username='TestName1',
+            password='TestPass1',
+            email=''
+        )
+
+    # Test if user can successfully sign up
+    def test_sign_up_successful(self):
+        username = 'Test Signup22'
+        password = 'Test Signup pass22'
+        self.client.post('/signup/', data={'username': username, 'password': password})
+        self.assertEqual(username, User.objects.last().username)
+
+    # Test if user redirected to homepage after sign up
+    def test_sign_up_redirect(self):
+        username = 'Test Signup22'
+        password = 'Test Signup pass22'
+        response = self.client.post('/signup/', data={'username': username, 'password': password})
+        self.assertRedirects(response, expected_url=reverse('writecloud:index'))
+
+    # Test if correct template used when signing up
+    def test_view_uses_correct_template(self):
+        self.client.force_login(User.objects.last(), backend=None)
+        self.client.post('/', User.objects.last().username, User.objects.last().password)
+        response = self.client.get('/signup/')
+        self.assertTemplateUsed(response, 'writecloud/signup.html')
