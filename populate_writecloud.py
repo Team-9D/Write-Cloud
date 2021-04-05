@@ -144,7 +144,7 @@ def populate():
     # Set counters and get all images for populating
     content_max = len(page_content)
     k = 0
-    images_counter = 1;
+    images_counter = 0
     all_images = os.listdir(os.path.join(os.getcwd(), 'images_for_populate/'))
     while k < content_max - 1:
         for i in range(len(stories[0]['title'])):
