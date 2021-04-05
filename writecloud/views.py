@@ -2,16 +2,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
-from django.db.models import Count, Avg
-from django.db.models import F
-<<<<<<< HEAD
+from django.db.models import Count, Avg, F
 from django.views.decorators.csrf import csrf_exempt
 
 from writecloud.models import Story, UserProfile
 from django.contrib.auth.models import User
 
-=======
->>>>>>> a4e24d538fffec3a4391c067f597f9d4d8d5a235
 from .forms import *
 
 
@@ -62,7 +58,6 @@ def account(request):
     context = {
         'name': request.user,
         'stories': [],
-
     }
 
     # Loop stories and get only stories which current user has contributed to
