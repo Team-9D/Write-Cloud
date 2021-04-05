@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "writecloud/base.html" %}
 <!DOCTYPE html>
 {% load staticfiles %}
@@ -9,109 +10,71 @@
 
 <!-- {% block header_logged_in %}
     {% endblock %}
+=======
+{% extends 'writecloud/base.html' %}
+{% block header_logged_out %}
+{% endblock %}
+>>>>>>> a4e24d538fffec3a4391c067f597f9d4d8d5a235
 {% block body_block %}
 {% block header_logo%}
     {% endblock %}
 {% load static %} -->
 <style>
-    .row{
-        margin-top: 1% !important;
-        color: #ee7752;
-    }
-    .inside{
-        font-size : 1.8vw;
-        font-family: "Apple Symbols";
-        color: #ee7752;
-        background-color: #f7ddd4;
-        border-radius: 5px;
-    }
-    .comment{
-        font-size : 1.5vw;
-        font-family: "Apple Symbols";
-        color: #23d5d2;
-        display: flex;
-        justify-content: center;
-    }
-    
-    ::placeholder{
-        font-size : 1.4vw;
-        font-family: "Apple Symbols";
-        color: #ee7752;
-        font-weight: bold;
-    }
-    
-    #input{
-        background: #23d5d2;
-        border-radius: 15px;
-    }
-    
-    #rankings{
-        margin: auto;
-    }
-    
-    #left-comment{
-        border-radius: 15px;
-        box-shadow: 0 0 5px #23d5d2;
-    }
-    
-    .glyphicon-star {
-        color: #23d5d2;
-    }
-    
-    .glyphicon-star-empty {
-        color: #dcf3f3;
-    }
-    .my-col{
-        padding-left: 2%;
-    }
-    .story-title{
-        color: #23d5d2;
-    }
-
-    
+h2{
+    color: #23d5d2 !important;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2%;
+}
+.inside{
+    font-size : 1.8vw;
+    font-family: "Apple Symbols";
+    color: #ee7752;
+    background-color: #f7ddd4;
+    border-radius: 5px;
+}
+.comment{
+    font-size : 1.5vw;
+    font-family: "Apple Symbols";
+    color: #23d5d2;
+    display: flex;
+    justify-content: center;
+}
+#left-comment{
+    border-radius: 15px;
+    box-shadow: 0 0 5px #23d5d2;
+}
+.row{
+    margin-top: 2% !important;
+    color: #ee7752;
+}
 </style>
-
-<!-- Profile photo -->
-<div class=container>
-<div class="row gutters-sm">
-    <div class="col-md-4 mb-3">
-      <div class="card">
-        <div class="card-body">
-          <div class="d-flex flex-column align-items-center text-center">
-
-            <!-- if user has no photo, use default. Otherwise use photo from database-->
-            {% if selected_user == hasNoPhoto %} 
-            <img src= "{{../static/default_profilepic.png" alt="default_profilepic" class="rounded-circle" width="150">
-            {% else %}
-            <img src = "{{ MEDIA_URL }}{{user_account.picture}" alt="{{selected_user.username}}'s profile image"/>
-            {%end if}
-
-            <!-- Ensure user name functionality-->
-              <h3 class="user-name">{{selected_user.username}}'s' Profile</h3>
-
-            <!-- Ensure biography functionality-->
-              <p class="text-muted font-size-sm">{{selected_user.biography}}</p>
-
-            <!-- Ensure upload photo functionality-->
-            {% if selected_user == user %}
-            {{ form.as_p}}
-            <input type = "submit" value="Update Profile Photo" />
-          </form>
-           {% else %}
-           <br>
-           {% endif %}
-
-              <h4 class= "story-title"> Stories</h4>
-            </div>
-          </div>
+    <h2> {{ name }}'s Stories</h2>
+    {% for story in stories %}
+    <div class="row">
+        <div class="col-md-1 col-sm-1 col-lg-1">
         </div>
-      </div>
-      <!--- LIST ALL STORIES - unsure how to make this work with backend functionality -->
-      <div class="card mt-3">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-            <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
-            <span class="text-secondary">{{user_stories}}</span>
+        <div class="col-md-3 col-sm-3 col-lg-3">
+        <li><a href="{% url 'writecloud:story' story.uuid %}" class="inside">{{ story.title }}</a></li>
+        </div>
+        <div class="col-md-1 col-sm-1 col-lg-1">
+        </div>
+        <div class="col-md-3 col-sm-3 col-lg-3">
+        <li><a href="{% url 'writecloud:story' story.uuid %}" class="inside">{{ story.length }} Total Pages</a></li>
+        </div>
+        <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
+            <li><a class="comment" href="{% url 'writecloud:story' story.uuid %}" >Initial Author {{ story.initial_author }}</a></li>
+        </div>
+        <div class="col-md-1 col-sm-1 col-lg-1">
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}
+
+
+
+     
+
 
       </div>
 

@@ -41,7 +41,7 @@ header {
 }
 
 .limit{
-    font-size : 1vw;
+    font-size : 1.3vw;
     font-family: "Apple Symbols";
     color: #23d5d2 !important;
 }
@@ -69,12 +69,12 @@ li {
                     <li><img class="resize-header" src="{% static "Logo.png" %}"/></li>
                     <li ><a class="limit" href="{% url 'writecloud:index' %}">Home</a></li>
                     <li><a class="limit" href="{% url 'writecloud:create_story' %}">Start Story</a></li>
-                    <li><a class="limit" href="{% url 'writecloud:top_stories' %}">Continue Story</a></li>
+                    <li><a class="limit" href="{% url 'writecloud:continue_story' %}">Continue Story</a></li>
                     <li><a class="limit" href="{% url 'writecloud:top_stories' %}">Top Stories</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a class="limit">looool</a></li>
-                    <li><a class="limit" href="{% url 'writecloud:account' user.username %}">My Account</a></li>
+                    <li><a class="limit" href="{% url 'writecloud:account' %}">My Account</a></li>
+                    <li><a class="limit" href="{% url 'writecloud:logout' %}">Log Out</a></li>
                     <li><a class="limit" href="{% url 'writecloud:contact' %}">Contact Us</a></li>
                 </ul>
               </div>
@@ -88,6 +88,7 @@ li {
                     <li><img class="resize-header" src="{% static "Logo.png" %}"/></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a class="limit" href="{% url 'writecloud:signup' %}">Sign Up</a></li>
                     <li><a class="limit" href="{% url 'writecloud:contact' %}">Contact Us</a></li>
                 </ul>
               </div>

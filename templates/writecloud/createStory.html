@@ -121,89 +121,87 @@ textarea[id^="input4"]{
     background-color: #ee7752 !important;
     color: #23d5d2;
 }
-
-
 </style>
 
-
-    <div class="row">
-        <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
-            <h5>Start a new story</h5>
-        </div>
+<div class="row">
+    <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
+        <h5>Start a new story</h5>
     </div>
-    <div class="row">
-        <form id="create_story" method="post"  action="{% url 'writecloud:create_story' %}">{% csrf_token %}
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
-                        <input type="text" id="in1" name="title" class="form-control" placeholder="Enter Title" />
-                    </div>
-                    <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
-                        <input type="text" id="in2"  name="subtitle" class="form-control" placeholder="Enter Subtitle"/>
-                    </div>
-                    <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
-                        <input type="text" id="in3"  name="length" class="form-control" placeholder="Enter Number of Pages"/>
-                    </div>
-                    <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
-                        <input readonly onclick="imagesFunction()" type="text" id="in" value="Click to include images"  name="include_images" class="form-control" placeholder="No Images included"/>
-                    </div>
+</div>
+<div class="row">
+    <form id="create_story" method="post"  action="{% url 'writecloud:create_story' %}">{% csrf_token %}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
+                    <input type="text" id="in1" name="title" class="form-control" placeholder="Enter Title" />
                 </div>
-                <div class="row" id="templates">
-                    <div class="col-md-2 col-sm-2 col-lg-2" >
-                    </div>
-                     <div id="single_template1" class="col-md-4 col-sm-4 col-lg-4">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-lg-12">
-                                  <div class="form-group">
-                                      <textarea readonly class="form-control" placeholder="Begin your story with template 1"
-                                                id="input1" name="template1" rows="10"></textarea>
-                                  </div>
-                        </div>
-                    </div>
-                  </div>
-                  <div id="single_template3" class="col-md-4 col-sm-4 col-lg-4">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-lg-12">
-                              <div class="form-group">
-                                  <textarea readonly class="form-control" placeholder="Begin your story with template 2"
-                                            id="input2" name="template2" rows="10"></textarea>
-                              </div>
-                        </div>
-                    </div>
-                  </div>
+                <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
+                    <input type="text" id="in2"  name="subtitle" class="form-control" placeholder="Enter Subtitle"/>
                 </div>
-                <div class="row" id="templates">
-                    <div class="col-md-2 col-sm-2 col-lg-2" >
-                    </div>
-                     <div id="single_template2" class="col-md-4 col-sm-4 col-lg-4">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-lg-12">
-                                  <div class="form-group">
-                                      <textarea readonly class="form-control" placeholder="Begin your story with template 3"
-                                                id="input3" name="template3" rows="10"></textarea>
-                                  </div>
-                        </div>
-                    </div>
-                  </div>
-                  <div id="single_template4" class="col-md-4 col-sm-4 col-lg-4">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-lg-12">
-                              <div class="form-group">
-                                  <textarea readonly class="form-control" placeholder="Begin your story with template 4"
-                                                id="input4" name="template4"  rows="10"></textarea>
-                              </div>
-                        </div>
-                    </div>
-                  </div>
+                <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
+                    <input type="text" id="in3"  name="length" class="form-control" placeholder="Enter Number of Pages"/>
                 </div>
-                <div hidden id="upload" class="row">
-                    <button type="submit" id="in"  class="btn btn-primary pull-right"><a id="credentials">Create Story</a></button>
+                <div class="col-md-2 col-sm-2 col-lg-2" id="credentials">
+                    <input readonly onclick="imagesFunction()" type="text" id="in" value="Click to include images"  name="include_images" class="form-control" placeholder="No Images included"/>
                 </div>
             </div>
-        </form>
-    </div>
+            <div class="row" id="templates">
+                <div class="col-md-2 col-sm-2 col-lg-2" >
+                </div>
+                 <div id="single_template1" class="col-md-4 col-sm-4 col-lg-4">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-lg-12">
+                              <div class="form-group">
+                                  <textarea readonly class="form-control" placeholder="Begin your story with template 1"
+                                            id="input1" name="template1" rows="10"></textarea>
+                              </div>
+                    </div>
+                </div>
+              </div>
+              <div id="single_template3" class="col-md-4 col-sm-4 col-lg-4">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12">
+                          <div class="form-group">
+                              <textarea readonly class="form-control" placeholder="Begin your story with template 2"
+                                        id="input2" name="template2" rows="10"></textarea>
+                          </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" id="templates">
+                <div class="col-md-2 col-sm-2 col-lg-2" >
+                </div>
+                 <div id="single_template2" class="col-md-4 col-sm-4 col-lg-4">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-lg-12">
+                              <div class="form-group">
+                                  <textarea readonly class="form-control" placeholder="Begin your story with template 3"
+                                            id="input3" name="template3" rows="10"></textarea>
+                              </div>
+                    </div>
+                </div>
+              </div>
+              <div id="single_template4" class="col-md-4 col-sm-4 col-lg-4">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12">
+                          <div class="form-group">
+                              <textarea readonly class="form-control" placeholder="Begin your story with template 4"
+                                            id="input4" name="template4"  rows="10"></textarea>
+                          </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div hidden id="upload" class="row">
+                <button type="submit" id="in"  class="btn btn-primary pull-right"><a id="credentials">Create Story</a></button>
+            </div>
+        </div>
+    </form>
+</div>
 
 <script>
+{#Functions for selecting template on click event#}
 document.getElementById("input1").addEventListener("click", ()=>{
     $('#input1').val('✓');
     $('#input2').val('');
@@ -232,6 +230,8 @@ document.getElementById("input4").addEventListener("click", ()=>{
     $('#input3').val('');
 
 });
+
+{#Function for choosing an image or not on click event#}
 let timesClicked = 0;
 function imagesFunction(){
     timesClicked++;
@@ -248,6 +248,7 @@ jQuery("#in1, #in2, #in3").on("input", function () {
     }
 });
 
+{#Allow only correct creation of story with present content#}
 function validate() {
   let isValid = true;
   $('input').each(function() {

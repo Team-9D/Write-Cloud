@@ -3,7 +3,6 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 import uuid
-import os
 
 
 # Create your models here.
@@ -11,7 +10,6 @@ import os
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default="images/default-avatar.png", upload_to='images/')
 
     class Meta:
         verbose_name = 'user'
@@ -58,6 +56,7 @@ class Page(models.Model):
     story = models.ForeignKey('Story', on_delete=models.CASCADE, related_name='pages')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pages')
 
+    # Each user can only have one page per story
     class Meta:
         verbose_name = 'page'
         verbose_name_plural = 'pages'
@@ -82,6 +81,7 @@ class Review(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     story = models.ForeignKey('Story', on_delete=models.CASCADE, related_name='reviews')
 
+    # Each user can only have one review per story
     class Meta:
         verbose_name = 'review'
         verbose_name_plural = 'reviews'

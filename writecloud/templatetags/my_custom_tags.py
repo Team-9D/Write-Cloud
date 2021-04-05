@@ -2,52 +2,7 @@ from django import template
 register = template.Library()
 
 
-class IncrementVarNode(template.Node):
-
-    def __init__(self, var_name):
-        self.var_name = var_name
-
-    def render(self,context):
-        value = context[self.var_name]
-        context[self.var_name] = value + 1
-        return u""
-
-
-def increment_var(parser, token):
-
-    parts = token.split_contents()
-    return IncrementVarNode(parts[1])
-
-
-register.tag('increment', increment_var)
-
-
-class DecrementVarNode(template.Node):
-
-    def __init__(self, var_name):
-        self.var_name = var_name
-
-    def render(self,context):
-        value = context[self.var_name]
-        context[self.var_name] = value - 1
-        return u""
-
-
-def increment_var(parser, token):
-
-    parts = token.split_contents()
-
-    return DecrementVarNode(parts[1])
-
-
-register.tag('decrement', increment_var)
-
-
-@register.simple_tag
-def define(the_string):
-    return the_string
-
-
+# Those are custom tags to match the exact functionality needed by the app in the templates
 @register.filter
 def return_number(pages, counter):
     return pages[counter]['number']
@@ -85,3 +40,33 @@ def check_unique_author(pages, user):
         if str(pages[i]['author']) == user.username:
             return False
     return True
+
+
+@register.filter
+def get_range(stars):
+    if stars == 1:
+        return '1'
+    if stars == 2:
+        return '12'
+    if stars == 3:
+        return '123'
+    if stars == 4:
+        return '1234'
+    else:
+        return '12345'
+
+
+@register.filter
+def get_top_range(stars):
+    if stars == '1':
+        return '1'
+    if stars == '2':
+        return '12'
+    if stars == '3':
+        return '123'
+    if stars == '4':
+        return '1234'
+    if stars == '5':
+        return '12345'
+    else:
+        return ''

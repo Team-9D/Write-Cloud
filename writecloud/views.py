@@ -4,27 +4,85 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Count, Avg
 from django.db.models import F
+<<<<<<< HEAD
 from django.views.decorators.csrf import csrf_exempt
 
 from writecloud.models import Story, UserProfile
 from django.contrib.auth.models import User
 
+=======
+>>>>>>> a4e24d538fffec3a4391c067f597f9d4d8d5a235
 from .forms import *
 
 
 # Create your views here.
 
-
+@login_required
 def index(request):
-    return render(request, 'writecloud/index.html')
+    # Get all stories
+    stories = Story.objects.all()
+    context = {
+        'total_stories': Story.objects.count(),
+        'total_users': User.objects.count(),
+        'stories': [],
+    }
+
+    # Loop stories and get top 5 most commented
+    for story in stories:
+        review = story.reviews.all()
+        stars = review.aggregate(Avg('stars'))['stars__avg']
+
+        story_dict = {
+            'uuid': story.uuid,
+            'title': story.title,
+            'stars': str(stars)[:1],
+            'total_reviews': int(Review.objects.filter(story=story).count()),
+        }
+
+        # Only attach completed stories
+        completed_pages = Page.objects.filter(story=story).count()
+        if completed_pages == story.length:
+            context['stories'].append(story_dict)
+
+    def get_my_key(obj):
+        return obj['total_reviews']
+
+    # Display up to 5 top stories
+    context['stories'].sort(key=get_my_key, reverse=True)
+    context['stories'] = context['stories'][:5]
+    return render(request, 'writecloud/index.html', context=context)
 
 
 def contact(request):
     return render(request, 'writecloud/contact.html')
 
 
+@login_required
 def account(request):
-    return render(request, 'writecloud/account.html')
+    context = {
+        'name': request.user,
+        'stories': [],
+
+    }
+
+    # Loop stories and get only stories which current user has contributed to
+    stories = Story.objects.all()
+    for story in stories:
+        story_dict = {
+            'uuid': story.uuid,
+            'title': story.title,
+            'length': story.length,
+            'initial_author': story.author,
+        }
+
+        # Only attach story with an author current user
+        user_in_story = Page.objects.filter(author=request.user, story=story)
+        if not user_in_story:
+            pass
+        else:
+            context['stories'].append(story_dict)
+
+    return render(request, 'writecloud/account.html', context=context)
 
 
 def sign_up(request):
@@ -65,12 +123,12 @@ def user_login(request):
         return render(request, 'writecloud/login.html', context={'disabled': False, 'fail': False})
 
 
-@login_required
 def user_logout(request):
     logout(request)
-    return redirect(reverse('writecloud:index'))
+    return redirect(reverse('writecloud:login'))
 
 
+@login_required
 def create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -78,7 +136,7 @@ def create(request):
         length = request.POST.get('length')
         template = 1
         include_images = False
-        print(request.POST.get('template2'))
+        # Get the selected template or continue with first template
         if request.POST.get('template2') == '✓':
             template = 2
         if request.POST.get('template3') == '✓':
@@ -87,11 +145,14 @@ def create(request):
             template = 4
         if request.POST.get('include_images') == 'Images Included':
             include_images = True
-        Story.objects.create(title=title, subtitle=subtitle, length=length, author=request.user, template=template,
-                             include_images=include_images)
+        new_story = Story.objects.create(title=title, subtitle=subtitle, length=length, author=request.user,
+                                         template=template,
+                                         include_images=include_images)
+        return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': new_story.uuid}))
     return render(request, 'writecloud/createStory.html')
 
 
+@login_required
 def story(request, story_uuid):
     # get the story for the requested UUID or redirect to a 404 page
     story = get_object_or_404(Story, pk=story_uuid)
@@ -111,7 +172,7 @@ def story(request, story_uuid):
         'total_pages': story.length,
         'pages': [],
         'counter': story.counter,
-        # 'stars': f"{stars:.1f}",
+        'stars': str(stars)[:4],
         'total': total,
         'include_images': story.include_images,
         'template': story.template,
@@ -161,7 +222,6 @@ def story(request, story_uuid):
 
             # if the request is POST, validate and save the form
             if request.method == 'POST':
-                # form = ReviewForm(request.POST)
                 if 'rightClick' in request.POST:
                     story.counter = F('counter') + 1
                     story.save(update_fields=["counter"])
@@ -177,12 +237,11 @@ def story(request, story_uuid):
                     })
                     return HttpResponseRedirect(reverse('writecloud:story', kwargs={'story_uuid': story_uuid}))
                 if 'voteForm' in request.POST:
-                    form = ReviewForm(request.POST)
-                    if form.is_valid():
-                        form.save()
-                    Review.objects.create(body='form.body', stars=2,
-                                          author=form.author,
-                                          story=form.story)
+                    body = request.POST.get('review')
+                    stars = request.POST.get('rate')
+                    Review.objects.create(body=body, stars=stars,
+                                          author=request.user,
+                                          story=story)
                 else:
                     number = request.POST.get('number')
                     image = request.FILES.get('image')
@@ -228,66 +287,56 @@ def story(request, story_uuid):
     return render(request, 'writecloud/story.html', context=context_dict)
 
 
+@login_required
 def top_stories(request):
     stories = Story.objects.all()
-
-    context_dict = {
+    context = {
         'stories': [],
     }
 
     for story in stories:
         review = story.reviews.all()
         stars = review.aggregate(Avg('stars'))['stars__avg']
-        total = review.aggregate(Count('stars'))['stars__count']
 
         story_dict = {
             'uuid': story.uuid,
             'title': story.title,
-            'author': story.author,
-            # 'stars': f"{stars:.1f}",
-            'total': total,
+            'stars': str(stars)[:1],
+            'total_reviews': int(Review.objects.filter(story=story).count()),
         }
-        context_dict['stories'].append(story_dict)
 
-    return render(request, 'writecloud/top_stories.html', context=context_dict)
+        # Only attach completed stories
+        completed_pages = Page.objects.filter(story=story).count()
+        if completed_pages == story.length:
+            context['stories'].append(story_dict)
 
-    def AccountView(View):
-        def get_user_details(self, username):
-            try:
-                user = User.objects.get(username=username)
-            except:
-                User.DoesNotExist
-                return None
-            user_account = UserProfile.objects.get_or_create(user=user)[0]
-            form = UserAccountForm({'website': user_account.wesbite, 'picture': user_account.pitcure})
+    def get_my_key(obj):
+        return obj['total_reviews']
 
-            return(user,user_account,form)
+    # Display all finished stories
+    context['stories'].sort(key=get_my_key, reverse=True)
 
-        @method_decorator(login_required)
-        def get(self, request, username):
-            try:
-                (user, user_account, form) = self.get_user_details(username)
-            except:
-                TypeError
-                return redirect(reverse('writecloud:index'))
-            context_dict= {'user_account': user_account,'selected_user': user,'form': form}
-            return render(request, 'writecloud/account.html, context_dict')
-        
-        @method_decorator(login_required)
-        def post(self,request,username):
-            try:
-                (user,user_account, form) = self.get_user_details(username)
-            except TypeError:
-                return redirect(reverse('writecloud:index'))
-            form = UserAccountForm(request.POST, request.FILES, instance = user_account)
+    return render(request, 'writecloud/top_stories.html', context=context)
 
-            if form.is_valid():
-                form.save(commit=True)
-                return redirect('writecloud:account', user.username)
-            else:
-                print(form.errors)
-            
-            context_dict = {'user_account':user_account, 'selected_user':user, 'form':form}
 
-            return render(request, 'writecloud/account.html', context_dict)
+@login_required
+def continue_story(request):
+    stories = Story.objects.all()
+    context = {
+        'stories': [],
+    }
 
+    for story in stories:
+        story_dict = {
+            'uuid': story.uuid,
+            'title': story.title,
+            'authors': int(Page.objects.filter(story=story).count()),
+            'length': story.length,
+        }
+
+        # Only attach unfinished stories
+        completed_pages = Page.objects.filter(story=story).count()
+        if completed_pages != story.length:
+            context['stories'].append(story_dict)
+
+    return render(request, 'writecloud/continue_story.html', context=context)

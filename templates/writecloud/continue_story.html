@@ -16,9 +16,6 @@ h2{
     background-color: #f7ddd4;
     border-radius: 5px;
 }
-.glyphicon-star {
-    color: #23d5d2;
-}
 .comment{
     font-size : 1.5vw;
     font-family: "Apple Symbols";
@@ -35,25 +32,21 @@ h2{
     color: #ee7752;
 }
 </style>
-    <h2> Top stories of the crowd</h2>
+    <h2> Contribute to a story of the crowd</h2>
     {% for story in stories %}
     <div class="row">
         <div class="col-md-1 col-sm-1 col-lg-1">
         </div>
         <div class="col-md-3 col-sm-3 col-lg-3">
-        <li><a href="{% url 'writecloud:story' story.uuid %}" class="inside">{{ forloop.counter }}. {{ story.title }}</a></li>
+        <li><a href="{% url 'writecloud:story' story.uuid %}" class="inside">{{ story.title }}</a></li>
         </div>
-        <div class="col-md-3 col-sm-3 col-lg-3" id="stars">
-        <div class="row">
-            {% for star in story.stars|get_top_range %}
-                <div class="col-md-2 col-sm-2 col-lg-2">
-                    <span class="glyphicon glyphicon-star"></span>
-                </div>
-            {% endfor %}
+        <div class="col-md-1 col-sm-1 col-lg-1">
         </div>
+        <div class="col-md-3 col-sm-3 col-lg-3">
+        <li><a href="{% url 'writecloud:story' story.uuid %}" class="inside">{{ story.length }} Total Pages</a></li>
         </div>
         <div class="col-md-3 col-sm-3 col-lg-3" id="left-comment">
-            <li><a class="comment" href="{% url 'writecloud:story' story.uuid %}" >{{ story.total_reviews }} Reviews</a></li>
+            <li><a class="comment" href="{% url 'writecloud:story' story.uuid %}" >Authors {{ story.authors }}</a></li>
         </div>
         <div class="col-md-1 col-sm-1 col-lg-1">
         </div>
